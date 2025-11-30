@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>80 Labs – Terms of Service</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #02040a;
+      --bg-soft: #050915;
+      --accent: #10ff6e;
+      --accent-soft: rgba(16, 255, 110, 0.15);
+      --text: #f5f7ff;
+      --muted: #9ca4c0;
+      --border: #181f30;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   "Inter", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #041320 0, var(--bg) 50%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to right, rgba(16,255,110,0.07), transparent);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(18px);
+      z-index: 20;
+    }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+    }
+    .nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+    .logo-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(16,255,110,.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 0, rgba(16,255,110,.35), #021011);
+      box-shadow: 0 0 18px rgba(16,255,110,.45);
+      font-size: .85rem;
+    }
+    .nav-cta {
+      display: flex;
+      gap: .75rem;
+      align-items: center;
+    }
+    .nav-link {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      padding: .6rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: .85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .18s ease-out;
+      background: transparent;
+      color: var(--text);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #10ff6e, #2bffb1);
+      color: #02130c;
+      box-shadow: 0 0 22px rgba(16,255,110,.45);
+    }
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow: 0 0 26px rgba(16,255,110,.65);
+    }
+    .btn-ghost {
+      border-color: var(--border);
+      background: rgba(3,9,20,.8);
+      color: var(--muted);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(16,255,110,.45);
+      color: var(--text);
+    }
+
+    main { flex: 1; }
+
+    .hero {
+      padding: 3.5rem 1.5rem 2.5rem;
+    }
+    .hero-grid {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.3fr);
+      gap: 3rem;
+      align-items: center;
+    }
+    @media (max-width: 880px) {
+      .hero-grid {
+        grid-template-columns: minmax(0,1fr);
+      }
+      .hero {
+        padding-top: 2.5rem;
+      }
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .2rem .75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.6);
+      font-size: .75rem;
+      color: var(--muted);
+      margin-bottom: .9rem;
+    }
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(16,255,110,.85);
+    }
+    h1 {
+      font-size: clamp(2.4rem, 3.1vw + 1.6rem, 3.3rem);
+      line-height: 1.1;
+      margin: 0 0 .9rem;
+    }
+    h1 span {
+      color: var(--accent);
+      text-shadow: 0 0 28px rgba(16,255,110,.5);
+    }
+    .hero-sub {
+      max-width: 32rem;
+      color: var(--muted);
+      font-size: .98rem;
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.1rem;
+      font-size: .78rem;
+      color: var(--muted);
+    }
+    .hero-meta strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .section {
+      padding: 2.7rem 1.5rem;
+      border-top: 1px solid rgba(10,18,30,.9);
+      background: radial-gradient(circle at top left, rgba(16,255,110,.07), transparent 60%);
+    }
+    .section-alt {
+      background: radial-gradient(circle at bottom right, rgba(16,255,110,.06), #02040a);
+    }
+    .section-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 1.6rem;
+    }
+    .section-title {
+      font-size: 1.2rem;
+      margin: 0 0 .35rem;
+    }
+    .section-kicker {
+      font-size: .8rem;
+      color: var(--muted);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .section-desc {
+      font-size: .86rem;
+      color: var(--muted);
+      max-width: 26rem;
+    }
+    @media (max-width: 720px) {
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.6rem 1.5rem 2.1rem;
+      background: #01030a;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="container nav-row">
+      <div class="logo-mark">
+        <div class="logo-icon">80</div>
+        <span>80 Labs</span>
+      </div>
+      <div class="nav-cta">
+        <!-- Update these links to whatever routes you use -->
+        <a href="/start" class="nav-link">Back to Start</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Legal &amp; Terms
+          </div>
+          <h1>Terms of Service</h1>
+          <p class="hero-sub">
+            These Terms govern your use of 80 Labs websites, content, signal feeds,
+            and related services. By accessing or using any 80 Labs service, you agree
+            to these Terms.
+          </p>
+          <div class="hero-meta">
+            <span><strong>Last updated:</strong> November 30, 2025</span>
+            <span><strong>Important:</strong> Nothing here is financial advice.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Agreement</div>
+            <h2 class="section-title">Please read these Terms carefully.</h2>
+          </div>
+          <p class="section-desc">
+            
+          </p>
+        </div>
+
+        <div style="
+          max-width: 760px;
+          font-size: .87rem;
+          line-height: 1.7;
+          color: var(--muted);
+          display: flex;
+          flex-direction: column;
+          gap: 1.4rem;
+        ">
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">1. Who we are</h2>
+            <p style="margin: 0;">
+              80 Labs (&quot;80 Labs&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;)
+              provides tools, research, and AI‑assisted trading systems designed to help
+              traders structure their own decision‑making processes. Our services include,
+              but are not limited to, our websites (including <strong>80labs.to</strong>
+              and any subpages such as <strong>/start</strong>), signal feeds (for example
+              via Telegram), educational content, and any other products or services that
+              link to these Terms (collectively, the &quot;Services&quot;).
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">2. Acceptance of Terms</h2>
+            <p style="margin: 0;">
+              By accessing or using the Services in any manner, you agree to be bound by
+              these Terms of Service (&quot;Terms&quot;). If you do not agree to these
+              Terms, you must not access or use the Services.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">3. Eligibility &amp; trader responsibility</h2>
+            <p style="margin: 0 0 .4rem;">
+              You may use the Services only if you:
+            </p>
+            <ul style="margin: 0 0 .4rem 1.1rem; padding: 0; list-style: disc;">
+              <li>are at least 18 years old (or the age of majority in your jurisdiction), and</li>
+              <li>have the legal capacity to enter into a binding contract, and</li>
+              <li>are not prohibited from using the Services under applicable law.</li>
+            </ul>
+            <p style="margin: 0;">
+              You are solely responsible for your own trading decisions, compliance with
+              local laws and regulations, and any taxes or reporting obligations that may
+              arise from your activity.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">4. No financial, investment, or trading advice</h2>
+            <p style="margin: 0 0 .4rem;">
+              All information and content provided through the Services, including
+              signals, indicators, system descriptions, market commentary, and educational
+              material, is for informational and educational purposes only.
+            </p>
+            <p style="margin: 0 0 .4rem;">
+              Nothing in the Services constitutes:
+            </p>
+            <ul style="margin: 0 0 .4rem 1.1rem; padding: 0; list-style: disc;">
+              <li>financial, investment, legal, tax, or other professional advice;</li>
+              <li>a recommendation to buy, sell, or hold any asset; or</li>
+              <li>a solicitation or offer to engage in any trading strategy or transaction.</li>
+            </ul>
+            <p style="margin: 0;">
+              We do not consider your individual circumstances, objectives, risk tolerance,
+              or financial situation. Any use of the Services is at your own risk and
+              discretion.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">5. Trading risk disclosure</h2>
+            <p style="margin: 0 0 .4rem;">
+              Trading and investing in cryptocurrencies, FX, indices, derivatives, and
+              other financial instruments is highly speculative and involves a substantial
+              risk of loss. You may lose some, all, or more than your initial capital.
+              Past performance, hypothetical backtests, or simulated results are not
+              indicative of future results.
+            </p>
+            <p style="margin: 0;">
+              By using the Services you acknowledge that you understand these risks and
+              that 80 Labs has no responsibility for any losses or damages arising from
+              your trading activity.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">6. Use of the Services</h2>
+            <p style="margin: 0 0 .4rem;">
+              Subject to these Terms, 80 Labs grants you a limited, revocable,
+              non‑exclusive, non‑transferable license to access and use the Services for
+              your personal, non‑commercial use only.
+            </p>
+            <p style="margin: 0 0 .4rem;">
+              You agree not to:
+            </p>
+            <ul style="margin: 0 0 .4rem 1.1rem; padding: 0; list-style: disc;">
+              <li>copy, reproduce, or redistribute signals or content for resale or
+                  commercial exploitation without our prior written consent;</li>
+              <li>scrape, harvest, or automate collection of content in a way that
+                  degrades or interferes with the Services;</li>
+              <li>use the Services for any unlawful, abusive, fraudulent, or manipulative
+                  purpose; or</li>
+              <li>attempt to circumvent any security or access controls associated with
+                  the Services.</li>
+            </ul>
+            <p style="margin: 0;">
+              We may suspend or terminate your access to the Services at any time if we
+              believe you have violated these Terms or are otherwise using the Services in
+              a way that could harm 80 Labs or other users.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">7. Accounts, security, and communications</h2>
+            <p style="margin: 0 0 .4rem;">
+              Some parts of the Services may require you to create an account or join a
+              third‑party platform (for example, a Telegram channel). You are responsible
+              for maintaining the confidentiality of any login credentials and for all
+              activities that occur under your account.
+            </p>
+            <p style="margin: 0;">
+              By using the Services, you consent to receiving operational and
+              service‑related communications from us, such as updates, notices, or
+              changes to these Terms. You can opt out of non‑essential marketing
+              communications at any time using the methods described in those messages.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">8. Third‑party services and links</h2>
+            <p style="margin: 0 0 .4rem;">
+              The Services may integrate with or link to third‑party platforms, tools, or
+              content (including brokers, exchanges, Telegram, charting platforms, or
+              automation tools). 80 Labs does not control and is not responsible for:
+            </p>
+            <ul style="margin: 0 0 .4rem 1.1rem; padding: 0; list-style: disc;">
+              <li>the availability, accuracy, or security of any third‑party services; or</li>
+              <li>any losses or issues arising from your use of third‑party services.</li>
+            </ul>
+            <p style="margin: 0;">
+              Your use of third‑party services is governed solely by the terms and privacy
+              policies of those providers.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">9. Fees, subscriptions, and changes</h2>
+            <p style="margin: 0 0 .4rem;">
+              We may offer both free and paid tiers of the Services. If you subscribe to
+              any paid plan, the applicable pricing, billing cycle, and additional terms
+              will be presented to you at the time of purchase.
+            </p>
+            <p style="margin: 0 0 .4rem;">
+              Unless otherwise stated, fees are non‑refundable. We may change our prices
+              or introduce new charges by posting updated information on our website or
+              otherwise notifying you in advance, subject to applicable law.
+            </p>
+            <p style="margin: 0;">
+              Your continued use of a paid Service after a price change becomes effective
+              constitutes your agreement to the new pricing.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">10. Intellectual property</h2>
+            <p style="margin: 0 0 .4rem;">
+              All content and materials made available through the Services, including
+              but not limited to text, graphics, logos, system descriptions, signals,
+              software, and design (&quot;Content&quot;), are owned by or licensed to
+              80 Labs and are protected by intellectual property and other laws.
+            </p>
+            <p style="margin: 0;">
+              Except for the limited license explicitly granted in these Terms, you do
+              not acquire any ownership rights in the Services or Content. Any unauthorised
+              use may violate copyright, trademark, and other laws.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">11. Disclaimer of warranties</h2>
+            <p style="margin: 0 0 .4rem;">
+              To the maximum extent permitted by law, the Services and all Content are
+              provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis, without
+              warranties of any kind, whether express, implied, or statutory.
+            </p>
+            <p style="margin: 0 0 .4rem;">
+              80 Labs specifically disclaims any implied warranties of merchantability,
+              fitness for a particular purpose, non‑infringement, and any warranties
+              arising out of course of dealing or usage of trade.
+            </p>
+            <p style="margin: 0;">
+              We do not warrant that the Services will be accurate, uninterrupted,
+              secure, or free of errors, or that any defects will be corrected.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">12. Limitation of liability</h2>
+            <p style="margin: 0 0 .4rem;">
+              To the maximum extent permitted by law, 80 Labs and its founders,
+              employees, contractors, and affiliates will not be liable for any
+              indirect, incidental, special, consequential, or punitive damages, or any
+              loss of profits, revenue, data, or goodwill, arising out of or related to
+              your use of (or inability to use) the Services, even if we have been
+              advised of the possibility of such damages.
+            </p>
+            <p style="margin: 0;">
+              To the extent any liability is not excluded, our total aggregate liability
+              arising out of or related to the Services will not exceed the greater of:
+              (a) the amount you have paid to 80 Labs for access to the Services in the
+              three (3) months preceding the event giving rise to the claim, or
+              (b) one hundred (100) US dollars (or equivalent in your local currency).
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">13. Indemnification</h2>
+            <p style="margin: 0;">
+              You agree to indemnify, defend, and hold harmless 80 Labs and its
+              affiliates, and their respective founders, employees, and agents, from and
+              against any claims, liabilities, damages, losses, and expenses (including
+              reasonable legal and accounting fees) arising out of or in any way
+              connected with your access to or use of the Services, your violation of
+              these Terms, or your violation of any applicable law or the rights of any
+              third party.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">14. Changes to the Services and these Terms</h2>
+            <p style="margin: 0 0 .4rem;">
+              We may update, modify, or discontinue any part of the Services at any time,
+              with or without notice, and without liability to you.
+            </p>
+            <p style="margin: 0;">
+              We may also update these Terms from time to time. When we do, we will
+              revise the &quot;Last updated&quot; date at the top of this page. Your
+              continued use of the Services after the updated Terms become effective
+              constitutes your acceptance of the new Terms.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">15. Governing law and jurisdiction</h2>
+            <p style="margin: 0;">
+              These Terms and any dispute arising out of or related to them or the
+              Services will be governed by and construed in accordance with the laws of the
+              <strong>United States of America</strong>, without regard to its
+              conflict of laws principles. You agree that the courts located in
+              <strong>Buffalo, NY</strong> will have exclusive
+              jurisdiction over any such disputes, subject to any mandatory local laws
+              that apply to you.
+            </p>
+          </div>
+
+          <div>
+            <h2 style="font-size: 1rem; margin: 0 0 .45rem;">16. Contact</h2>
+            <p style="margin: 0;">
+              If you have any questions about these Terms or the Services, you can
+              contact us at:
+              <br />
+              <strong>Email:</strong> <a href="mailto:help@80labs.to">hello@80labs.to</a>
+              <!-- Update this to your actual contact email -->
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2025 80 Labs. Automated trading systems &amp; research.</span>
+      <span>Nothing on this site is financial advice. Trade responsibly.</span>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
