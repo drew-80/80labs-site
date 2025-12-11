@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <html lang="en">
 <head>
-	<script src="https://www.google.com/recaptcha/api.js?render=6LfoCCgsAAAAADDU2ZNtZZywRx2nx0RqugI7Gt_2"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6LfoCCgsAAAAADDU2ZNtZZywRx2nx0RqugI7Gt_2"></script>
   <meta charset="UTF-8" />
   <title>EdgeDesk v2 · AI Options Desk</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -142,15 +142,15 @@
       max-height: 260px;
       overflow: auto;
       white-space: pre-wrap;
-   }
+    }
     .advisor-json-output.error {
       border-color: var(--danger);
       color: var(--danger);
-   }
+    }
     .advisor-json-output.loading {
       opacity: 0.7;
-   }   
-      
+    }   
+
     .brand {
       display: flex;
       align-items: center;
@@ -769,8 +769,8 @@
             <textarea id="advIdea" placeholder="Describe the setup in your language – trend pullback, breakout, reversal, etc."></textarea>
           </label>
           <p class="hint">
-            In a wired stack, clicking <strong>Run Advisor</strong> would call your multi‑agent stack
-            (Data, News, Sentiment, Risk) and render a plan on the right: zones, contract templates, scaling rules,
+            In a wired stack, clicking <strong>Run Advisor</strong> will call your n8n Advisor workflow
+            (with reCAPTCHA) and render a plan on the right: zones, contract templates, scaling rules,
             and a short narrative.
           </p>
           <div class="btn-row">
@@ -1024,8 +1024,8 @@
             <li><strong>Logs:</strong> everything the system does, for trust and debugging.</li>
           </ul>
           <p class="right-pane-text">
-            This file is still offline: it doesn’t call n8n, 12Data, or IBKR yet. It’s the new shell you’ll wire into
-            those pieces.
+            This file is still offline: it doesn’t call 12Data or IBKR yet. The Advisor button now posts directly to
+            your n8n webhook.
           </p>
 
           <hr class="divider" />
@@ -1060,21 +1060,20 @@
 
         <!-- Advisor right -->
         <div class="screen" data-screen="advisor">
-          <div class="right-pane-title">Advisor Output (conceptual)</div>
+          <div class="right-pane-title">Advisor Output</div>
           <p class="right-pane-text">
             <strong>Session mode:</strong> <span id="advisorModeInline">NORMAL</span>.
           </p>
           <p class="right-pane-text">
-            In the wired stack, this panel will be populated by your Advisor agent after reading:
+            When you click <strong>Run Advisor</strong>, the UI:
           </p>
           <ul class="right-pane-list">
-            <li>Your current risk mode and daily cap.</li>
-            <li>The symbol, style, and mental state set on the left.</li>
-            <li>Playbook entries and canonical examples for this setup.</li>
+            <li>Collects your symbol, style, risk mode, mental state and idea.</li>
+            <li>Runs Google reCAPTCHA (client‑side) to get a token.</li>
+            <li>POSTs everything to your n8n webhook as JSON.</li>
           </ul>
           <p class="right-pane-text">
-            The output should look like a compact trade plan: entry/invalidation/targets,
-            contract templates, scaling rules, and 3 bullet reminders for managing the trade.
+            Whatever JSON your n8n <em>Respond to Webhook</em> node returns will appear here.
           </p>
           <pre id="advisorOutputBox" class="advisor-json-output">{ "status": "idle", "details": "Run Advisor to fetch a plan." }</pre>
         </div>
@@ -1176,8 +1175,8 @@
     </main>
 
     <footer>
-      Static shell for your AI options desk. No live data or broker connection yet – just the v2 framing
-      for Advisor, Analyzer, Playbook, Bots and Logs.
+      Static shell for your AI options desk. No live data or broker connection yet – Advisor now calls your n8n
+      workflow directly, everything else is still local-only.
     </footer>
   </div>
 
@@ -1200,7 +1199,7 @@
       dayPL: 0
     };
 
-    // Advisor / n8n wiring constants
+    // Advisor / n8n wiring constants (front-end calls n8n directly)
     const N8N_ADVISOR_URL = "https://pov80.app.n8n.cloud/webhook/edge/advisor-v1";
     const RECAPTCHA_SITE_KEY = "6LfoCCgsAAAAADDU2ZNtZZywRx2nx0RqugI7Gt_2";
 
@@ -1337,7 +1336,7 @@
     window.addTrade = addTrade;
     window.clearTrades = clearTrades;
 
-    // ----- Advisor: reCAPTCHA + n8n integration -----
+    // ----- Advisor: reCAPTCHA + direct n8n integration -----
     const advisorOutputBox = document.getElementById("advisorOutputBox");
 
     function setAdvisorOutput(content, { isError = false, isLoading = false } = {}) {
