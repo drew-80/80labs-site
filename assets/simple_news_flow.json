@@ -1,0 +1,218 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "92a4a007-7664-42db-ad67-a606b79ba2a6",
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        3008,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "cnbcRssUrl",
+              "value": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "coindeskRssUrl",
+              "value": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "yahooFinanceRssUrl",
+              "value": "https://finance.yahoo.com/news/rssindex",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "43671499-1112-4577-bdb8-aff26131d023",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3232,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Workflow Configuration').first().json.cnbcRssUrl }}",
+        "options": {}
+      },
+      "id": "c0a66ff1-f596-48df-b994-38966fa1e67b",
+      "name": "Read CNBC RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        3456,
+        1552
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Workflow Configuration').first().json.coindeskRssUrl }}",
+        "options": {}
+      },
+      "id": "e6741d4b-77f0-4270-80e7-712b43733320",
+      "name": "Read Coindesk RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        3456,
+        1744
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Workflow Configuration').first().json.yahooFinanceRssUrl }}",
+        "options": {}
+      },
+      "id": "70d9ff27-5ccd-41ee-bd94-0fde48daa879",
+      "name": "Read Yahoo Finance RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        3456,
+        1936
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "id": "d122e0a2-681a-4b22-837f-a303227fbd46",
+      "name": "Combine All RSS Feeds",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3680,
+        1728
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst formatted = items.map(item => ({\n  title: item.json.title,\n  link: item.json.link,\n  snippet: item.json.contentSnippet || item.json.content?.substring(0, 200) || 'No description',\n  pubDate: item.json.pubDate\n}));\n\nconst summary = {\n  totalArticles: formatted.length,\n  articles: formatted\n};\n\nreturn [{ json: summary }];"
+      },
+      "id": "90e93d24-c390-4611-9d52-8a90bb42a071",
+      "name": "Format RSS Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3904,
+        1744
+      ]
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Read CNBC RSS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Coindesk RSS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Yahoo Finance RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read CNBC RSS": {
+      "main": [
+        [
+          {
+            "node": "Combine All RSS Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Coindesk RSS": {
+      "main": [
+        [
+          {
+            "node": "Combine All RSS Feeds",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Read Yahoo Finance RSS": {
+      "main": [
+        [
+          {
+            "node": "Combine All RSS Feeds",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Combine All RSS Feeds": {
+      "main": [
+        [
+          {
+            "node": "Format RSS Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format RSS Data": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ca01d2fe2f62c844131172fc15c95d4ee48e02a52ff3a745be25367c926aa9ad"
+  }
+}
