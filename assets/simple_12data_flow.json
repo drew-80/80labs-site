@@ -1,0 +1,260 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"assetType\"]}}",
+              "value2": "crypto"
+            }
+          ]
+        }
+      },
+      "name": "Route Asset Type",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        5888,
+        1920
+      ],
+      "id": "66a2a5b1-3cac-4dd8-8fae-8099628d94ba"
+    },
+    {
+      "parameters": {
+        "url": "={{\"https://api.binance.com/api/v3/klines?symbol=\" + ($json[\"vendorSymbol\"] || $json[\"symbol\"]) + \"&interval=1h&limit=100\"}}",
+        "options": {}
+      },
+      "name": "Fetch Crypto OHLC – Binance",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        6112,
+        1824
+      ],
+      "id": "7dea2d09-5581-4ee6-805d-d6b94908e5de",
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "authentication": "none",
+        "url": "https://api.twelvedata.com/time_series",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "={{$json[\"vendorSymbol\"] || $json[\"symbol\"]}}"
+            },
+            {
+              "name": "interval",
+              "value": "1h"
+            },
+            {
+              "name": "outputsize",
+              "value": "100"
+            },
+            {
+              "name": "apikey",
+              "value": "YOUR_TWELVEDATA_API_KEY"
+            }
+          ]
+        }
+      },
+      "name": "Fetch Stock OHLC – TwelveData",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        6560,
+        2016
+      ],
+      "id": "76c6ec7d-fdcf-45e8-a6d3-8a9e9336b8f2",
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 3
+            }
+          ]
+        }
+      },
+      "id": "95e21008-8597-42a2-b21d-0b4244915852",
+      "name": "Schedule – Every 3 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        5440,
+        1920
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Define crypto and stock symbols with metadata\nconst symbols = [\n  // Crypto symbols\n  {\n    symbol: \"BTCUSDT\",\n    vendorSymbol: \"BTCUSDT\",\n    assetType: \"crypto\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"ETHUSDT\",\n    vendorSymbol: \"ETHUSDT\",\n    assetType: \"crypto\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"SOLUSDT\",\n    vendorSymbol: \"SOLUSDT\",\n    assetType: \"crypto\",\n    timeframe: \"1h\"\n  },\n  // Stock symbols\n  {\n    symbol: \"META\",\n    vendorSymbol: \"META\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"MSFT\",\n    vendorSymbol: \"MSFT\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"TSLA\",\n    vendorSymbol: \"TSLA\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"GOOGL\",\n    vendorSymbol: \"GOOGL\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"AAPL\",\n    vendorSymbol: \"AAPL\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"NVDA\",\n    vendorSymbol: \"NVDA\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"AMAT\",\n    vendorSymbol: \"AMAT\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"AMD\",\n    vendorSymbol: \"AMD\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"NBIS\",\n    vendorSymbol: \"NBIS\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  },\n  {\n    symbol: \"AMZN\",\n    vendorSymbol: \"AMZN\",\n    assetType: \"stock\",\n    timeframe: \"1h\"\n  }\n];\n\n// Return symbols as separate items\nreturn symbols.map(s => ({ json: s }));"
+      },
+      "id": "d3744d3e-6ac1-4d70-931d-f37dfd596821",
+      "name": "Set Symbols",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5664,
+        1920
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compute Indicators & Flags\n// This node processes normalized candle data and computes technical indicators\n\nconst items = $input.all();\n\n// Helper function to calculate Simple Moving Average\nfunction calculateSMA(data, period) {\n  if (data.length < period) return null;\n  const sum = data.slice(-period).reduce((acc, val) => acc + val, 0);\n  return sum / period;\n}\n\n// Helper function to calculate RSI\nfunction calculateRSI(closes, period = 14) {\n  if (closes.length < period + 1) return null;\n  \n  let gains = 0;\n  let losses = 0;\n  \n  // Calculate initial average gain and loss\n  for (let i = closes.length - period; i < closes.length; i++) {\n    const change = closes[i] - closes[i - 1];\n    if (change > 0) {\n      gains += change;\n    } else {\n      losses += Math.abs(change);\n    }\n  }\n  \n  const avgGain = gains / period;\n  const avgLoss = losses / period;\n  \n  if (avgLoss === 0) return 100;\n  \n  const rs = avgGain / avgLoss;\n  const rsi = 100 - (100 / (1 + rs));\n  \n  return rsi;\n}\n\n// Process each item\nconst results = items.map(item => {\n  const candles = item.json.candles || [];\n  \n  if (candles.length === 0) {\n    return {\n      json: {\n        ...item.json,\n        error: 'No candles data available'\n      }\n  };\n  }\n  \n  // Extract close prices\n  const closes = candles.map(c => c.close);\n  \n  // Calculate indicators\n  const sma9 = calculateSMA(closes, 9);\n  const sma21 = calculateSMA(closes, 21);\n  const rsi14 = calculateRSI(closes, 14);\n  \n  // Get current price (last close)\n  const currentPrice = closes[closes.length - 1];\n  \n  // Set flags\n  const maBullish = sma9 !== null && sma21 !== null && sma9 > sma21;\n  const maBearish = sma9 !== null && sma21 !== null && sma9 < sma21;\n  const rsiOversold = rsi14 !== null && rsi14 < 30;\n  const rsiOverbought = rsi14 !== null && rsi14 > 70;\n  \n  return {\n    json: {\n      ...item.json,\n      indicators: {\n        sma9: sma9,\n        sma21: sma21,\n        rsi14: rsi14,\n        currentPrice: currentPrice\n      },\n      flags: {\n        maBullish: maBullish,\n        maBearish: maBearish,\n        rsiOversold: rsiOversold,\n        rsiOverbought: rsiOverbought\n      }\n    }\n  };\n});\n\nreturn results;"
+      },
+      "id": "beae1c60-4fbb-4dd8-8afd-14603ab37d8a",
+      "name": "Compute Indicators & Flags",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6336,
+        1824
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter setups with any signal flags and score them\nconst scoredSetups = [];\n\nfor (const item of $input.all()) {\n  const flags = item.json.flags || {};\n  \n  // Check if there are any signal flags\n  const hasSignals = flags.maBullish || flags.maBearish || flags.rsiOversold || flags.rsiOverbought;\n  \n  if (!hasSignals) {\n    continue; // Skip items without any signals\n  }\n  \n  // Calculate score\n  let score = 0;\n  \n  // MA signals: +3 points\n  if (flags.maBullish) score += 3;\n  if (flags.maBearish) score += 3;\n  \n  // RSI signals: +2 points\n  if (flags.rsiOversold) score += 2;\n  if (flags.rsiOverbought) score += 2;\n  \n  // Bonus +1 if MA and RSI align\n  const bullishAlignment = flags.maBullish && flags.rsiOversold;\n  const bearishAlignment = flags.maBearish && flags.rsiOverbought;\n  \n  if (bullishAlignment || bearishAlignment) {\n    score += 1;\n  }\n  \n  // Add scored setup\n  scoredSetups.push({\n    json: {\n      ...item.json,\n      score: score,\n      alignment: bullishAlignment ? 'bullish' : (bearishAlignment ? 'bearish' : 'none')\n    }\n  });\n}\n\n// Sort by score descending\nscoredSetups.sort((a, b) => b.json.score - a.json.score);\n\nreturn scoredSetups;"
+      },
+      "id": "081092a7-41a3-476f-b1e9-3e6ff718173e",
+      "name": "Score & Filter Setups",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6560,
+        1824
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Sort setups by score descending and return top 3 with rank field\nconst sortedSetups = $input.all()\n  .sort((a, b) => (b.json.score || 0) - (a.json.score || 0))\n  .slice(0, 3)\n  .map((item, index) => ({\n    json: {\n      ...item.json,\n      rank: index + 1\n    }\n  }));\n\nreturn sortedSetups;"
+      },
+      "id": "25b0cc3a-df1e-41c2-9fb2-8e2459797a34",
+      "name": "Select Top 3 Setups",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6784,
+        1824
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate TwelveData response and compute indicators\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  const data = item.json;\n  \n  // Validate response has status ok and non-empty values array\n  if (data.status !== 'ok' || !data.values || !Array.isArray(data.values) || data.values.length === 0) {\n    continue; // Skip invalid responses\n  }\n  \n  // Reverse values from newest-first to oldest-newest\n  const candles = [...data.values].reverse();\n  \n  // Extract close prices\n  const closes = candles.map(c => parseFloat(c.close));\n  \n  // Helper function to calculate Simple Moving Average\n  function calculateSMA(prices, period) {\n    if (prices.length < period) return null;\n    const sum = prices.slice(-period).reduce((acc, val) => acc + val, 0);\n    return sum / period;\n  }\n  \n  // Helper function to calculate RSI\n  function calculateRSI(prices, period = 14) {\n    if (prices.length < period + 1) return null;\n    \n    let gains = 0;\n    let losses = 0;\n    \n    // Calculate initial average gain and loss\n    for (let i = prices.length - period; i < prices.length; i++) {\n      const change = prices[i] - prices[i - 1];\n      if (change > 0) {\n        gains += change;\n      } else {\n        losses += Math.abs(change);\n      }\n    }\n    \n    const avgGain = gains / period;\n    const avgLoss = losses / period;\n    \n    if (avgLoss === 0) return 100;\n    \n    const rs = avgGain / avgLoss;\n    const rsi = 100 - (100 / (1 + rs));\n    \n    return rsi;\n  }\n  \n  // Compute indicators\n  const maShort = calculateSMA(closes, 9);\n  const maLong = calculateSMA(closes, 21);\n  const rsi = calculateRSI(closes, 14);\n  const lastClose = closes[closes.length - 1];\n  \n  // Set boolean flags\n  const maBullish = maShort !== null && maLong !== null && maShort > maLong;\n  const maBearish = maShort !== null && maLong !== null && maShort < maLong;\n  const rsiOversold = rsi !== null && rsi < 30;\n  const rsiOverbought = rsi !== null && rsi > 70;\n  \n  // Return single item with all computed values\n  results.push({\n    json: {\n      symbol: data.meta?.symbol || 'UNKNOWN',\n      lastClose: lastClose,\n      maShort: maShort,\n      maLong: maLong,\n      rsi: rsi,\n      maBullish: maBullish,\n      maBearish: maBearish,\n      rsiOversold: rsiOversold,\n      rsiOverbought: rsiOverbought\n    }\n  });\n}\n\nreturn results;"
+      },
+      "id": "75df4c5e-7e2a-4d66-8663-6124c4d6ac37",
+      "name": "ComputeSignals (Twelve Data)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6784,
+        2016
+      ]
+    }
+  ],
+  "connections": {
+    "Route Asset Type": {
+      "main": [
+        [
+          {
+            "node": "Fetch Crypto OHLC – Binance",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Stock OHLC – TwelveData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Crypto OHLC – Binance": {
+      "main": [
+        [
+          {
+            "node": "Compute Indicators & Flags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Stock OHLC – TwelveData": {
+      "main": [
+        [
+          {
+            "node": "ComputeSignals (Twelve Data)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule – Every 3 Hours": {
+      "main": [
+        [
+          {
+            "node": "Set Symbols",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Symbols": {
+      "main": [
+        [
+          {
+            "node": "Route Asset Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Indicators & Flags": {
+      "main": [
+        [
+          {
+            "node": "Score & Filter Setups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score & Filter Setups": {
+      "main": [
+        [
+          {
+            "node": "Select Top 3 Setups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Top 3 Setups": {
+      "main": [
+        []
+      ]
+    },
+    "ComputeSignals (Twelve Data)": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
