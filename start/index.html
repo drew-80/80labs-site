@@ -451,19 +451,55 @@
             simple framework for building your own automated edge.
           </p>
           <div style="margin-bottom:1rem;">
-            <!-- Placeholder form - wire this to your ESP -->
-            <form action="#" method="post" style="display:flex; flex-wrap:wrap; gap:.6rem;">
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="you@trader.com"
-                style="flex:1 1 160px; min-width:0; padding:.55rem .7rem; border-radius:999px;
-                       border:1px solid var(--border); background:rgba(1,5,14,.9);
-                       color:var(--text); font-size:.85rem;"
-              />
-              <button type="submit" class="btn btn-primary">Send me the kit</button>
-            </form>
+            <form id="waitlistForm" style="display:flex; flex-wrap:wrap; gap:.6rem;">
+  <input
+    type="email"
+    name="email"
+    required
+    placeholder="you@trader.com"
+    style="flex:1 1 160px; min-width:0; padding:.55rem .7rem; border-radius:999px;
+           border:1px solid #181f30; background:rgba(1,5,14,.9);
+           color:#f5f7ff; font-size:.85rem;"
+  />
+  <button type="submit" class="btn btn-primary">Join waitlist</button>
+</form>
+
+<p id="waitlistStatus" style="margin-top:.7rem; color:#9ca4c0; font-size:.85rem;"></p>
+
+<script>
+  const WEBHOOK_URL = "https://pov80.app.n8n.cloud/webhook/80labs-waitlist";
+
+  const form = document.getElementById("waitlistForm");
+  const statusEl = document.getElementById("waitlistStatus");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusEl.textContent = "Submitting...";
+
+    const email = form.email.value.trim();
+
+    try {
+      const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "80labs.to/start" })
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || data.ok === false) {
+        statusEl.textContent = data.message || "Something went wrong. Try again.";
+        return;
+      }
+
+      statusEl.textContent = data.message || "You're on the waitlist ✅";
+      form.reset();
+    } catch (err) {
+      statusEl.textContent = "Network error. Please try again.";
+    }
+  });
+</script>
+
           </div>
           <div class="metrics-row">
             <div class="metric">
