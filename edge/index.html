@@ -1,806 +1,856 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>EdgeDesk | Example Workspace | 80 Labs</title>
-  <meta name="description" content="EdgeDesk is one example workspace built on top of CloudBeasts x lanOS. Offline demo shell with no live data or broker connection." />
+  <meta name="description" content="EdgeDesk is one example workspace built on top of CloudBeasts x lanOS. Offline demo shell with no live data, no broker connection, and no live execution." />
   <link rel="icon" href="data:," />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
       color-scheme: dark;
-
-      /* Appleâ€‘ish dark palette */
-      --bg: #050507;
-      --bg-alt: #0b0b10;
-      --shell-bg: rgba(15, 15, 22, 0.9);
-      --surface: #101117;
-      --surface-soft: #161720;
-      --border-hairline: rgba(255, 255, 255, 0.06);
-      --border-strong: rgba(255, 255, 255, 0.12);
-      --accent: #0a84ff;
-      --accent-soft: rgba(10, 132, 255, 0.12);
-      --accent-strong: #4da3ff;
-      --accent-warm: #ff9f0a;
-      --text-main: #f5f5f7;
-      --text-muted: #a1a1b3;
-      --text-soft: #6e6e80;
-      --pill-pos-bg: rgba(48, 209, 88, 0.12);
-      --pill-pos-border: rgba(48, 209, 88, 0.5);
-      --pill-pos-text: #d1f8d8;
-      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.85);
-      --radius-xl: 22px;
-      --radius-lg: 16px;
-      --radius-md: 10px;
-      --radius-sm: 8px;
+      --bg: #05060f;
+      --bg-soft: #0b0f1e;
+      --card: #111629;
+      --card-alt: #151b32;
+      --border-subtle: #252a40;
+      --accent: #5b8bff;
+      --accent-2: #7f5dff;
+      --accent-soft: rgba(91, 139, 255, 0.16);
+      --text-main: #f5f7ff;
+      --text-muted: #9da5cc;
+      --danger: #ff5c7a;
+      --success: #32d47a;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, #14151f 0, transparent 50%),
-        radial-gradient(circle at bottom right, #020208 0, #000000 60%);
-      color: var(--text-main);
+      margin: 0;
       min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #1b2450 0, transparent 55%),
+        radial-gradient(circle at bottom right, #0c1023 0, #05060f 60%);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* Splash screen */
+    #splash-screen {
+      position: fixed;
+      inset: 0;
       display: flex;
+      align-items: center;
       justify-content: center;
-      padding: 1.5rem 1.2rem;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at top left, #252f76 0, transparent 55%),
+        radial-gradient(circle at bottom right, #10152d 0, #05060f 70%);
+      z-index: 10;
+      pointer-events: none;
+      animation: splashFadeOut 1s ease-out forwards;
+      animation-delay: 0.9s;
     }
-
-    .shell {
-      width: 100%;
-      max-width: 1120px;
-      border-radius: 30px;
-      background: linear-gradient(145deg, rgba(255,255,255,0.03), transparent);
-      padding: 1.1rem 1.1rem 1.4rem;
+    @keyframes splashFadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+    .splash-logo {
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 25% 0, #ffffff 0, #f4f0ff 8%, transparent 35%),
+        conic-gradient(from 220deg, #5b8bff, #7f5dff, #ff6bb3, #5b8bff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.03),
-        0 40px 120px rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(26px);
+        0 0 26px rgba(0,0,0,0.9),
+        0 0 40px rgba(91,139,255,0.9);
+      position: relative;
+      overflow: hidden;
+    }
+    .splash-logo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.25) 0, transparent 55%);
+      mix-blend-mode: multiply;
+    }
+    .splash-logo span {
+      font-weight: 700;
+      font-size: 1.6rem;
+      z-index: 1;
+    }
+    .splash-title {
+      margin-top: 1rem;
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+    }
+    .splash-subtitle {
+      margin-top: 0.35rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      max-width: 300px;
+      text-align: center;
+    }
+    .splash-loader {
+      margin-top: 1.6rem;
+      width: 120px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(14,18,40,0.9);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.7);
+    }
+    .splash-loader span {
+      position: absolute;
+      inset: 0;
+      transform: translateX(-60%);
+      background: linear-gradient(90deg, transparent, #5b8bff, #7f5dff, transparent);
+      animation: loadSlide 1.4s ease-in-out infinite;
+    }
+    @keyframes loadSlide {
+      0% { transform: translateX(-80%); }
+      50% { transform: translateX(0%); }
+      100% { transform: translateX(80%); }
     }
 
-    header {
+    /* App shell */
+    .app-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.3rem 1.05rem 2rem;
+    }
+
+    header.app-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.9rem;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin-bottom: 1.1rem;
     }
+    .advisor-json-output {
+      margin-top: 0.5rem;
+      padding: 0.6rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-subtle);
+      background: #050713;
+      font-size: 0.72rem;
+      line-height: 1.4;
+      max-height: 260px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+    .advisor-json-output.error {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+    .advisor-json-output.loading {
+      opacity: 0.7;
+    }   
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.6rem;
     }
-
     .brand-logo {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
       background:
-        radial-gradient(circle at 25% 0, #ffffff 0, #f4f4ff 14%, transparent 40%),
-        conic-gradient(from 210deg, #0a84ff, #64d2ff, #ff9f0a, #0a84ff);
+        radial-gradient(circle at 20% 0, #ffffff 0, #f4f0ff 8%, transparent 40%),
+        conic-gradient(from 210deg, #5b8bff, #7f5dff, #ff6bb3, #5b8bff);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      letter-spacing: 0.09em;
-      color: #000;
       box-shadow:
-        0 0 20px rgba(0,0,0,0.85),
-        0 0 32px rgba(10,132,255,0.9);
+        0 0 18px rgba(0,0,0,0.9),
+        0 0 24px rgba(91,139,255,0.8);
       position: relative;
       overflow: hidden;
     }
-
     .brand-logo::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at center, rgba(0,0,0,0.28) 0, transparent 60%);
+      background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0, transparent 60%);
       mix-blend-mode: multiply;
     }
-
-    .brand-text h1 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-    }
-
-    .brand-text h1 span.sub {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--text-soft);
-      margin-left: 0.3rem;
-    }
-
-    .brand-text p {
-      font-size: 0.76rem;
-      color: var(--text-soft);
-      margin-top: 0.12rem;
-    }
-
-    .header-tags {
+    .brand-text {
       display: flex;
-      gap: 0.35rem;
+      flex-direction: column;
+    }
+    .brand-text-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .brand-text-subtitle {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.45rem;
+    }
+
+    .risk-summary {
+      display: flex;
       flex-wrap: wrap;
       justify-content: flex-end;
+      gap: 0.3rem;
     }
-
-    .tag {
-      font-size: 0.7rem;
-      padding: 0.18rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid var(--border-hairline);
-      color: var(--text-soft);
-      background: rgba(15, 16, 22, 0.94);
-    }
-
-    /* Tabs state (hidden radios) */
-    input[type="radio"] {
-      display: none;
-    }
-
-    /* Segmented control nav (Appleâ€‘ish) */
-    .nav-wrapper {
-      width: fit-content;
-      max-width: 100%;
-      background: rgba(22, 23, 30, 0.9);
-      border-radius: 999px;
-      border: 1px solid var(--border-hairline);
-      padding: 0.18rem;
-      display: inline-flex;
-      gap: 0.15rem;
-      box-shadow:
-        0 0 0 1px rgba(0,0,0,0.7),
-        0 18px 40px rgba(0,0,0,0.85);
-      margin-bottom: 0.6rem;
-    }
-
-    .nav-label {
-      font-size: 0.78rem;
-      padding: 0.32rem 0.9rem;
-      border-radius: 999px;
-      cursor: pointer;
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: background 0.16s ease, color 0.16s ease, transform 0.1s ease;
-      user-select: none;
-      white-space: nowrap;
-    }
-
-    .nav-label span.icon {
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
-
-    .nav-label:hover {
-      background: rgba(255,255,255,0.04);
-      color: var(--accent-strong);
-    }
-
-    /* Active tab styles (segmented control selection) */
-    #tab-home:checked ~ .shell .nav-wrapper label[for="tab-home"],
-    #tab-advisor:checked ~ .shell .nav-wrapper label[for="tab-advisor"],
-    #tab-post:checked ~ .shell .nav-wrapper label[for="tab-post"],
-    #tab-playbook:checked ~ .shell .nav-wrapper label[for="tab-playbook"],
-    #tab-profile:checked ~ .shell .nav-wrapper label[for="tab-profile"] {
-      background: linear-gradient(135deg, var(--accent), #3ac3ff);
-      color: #000;
-      box-shadow:
-        0 0 0 1px rgba(0,0,0,0.8),
-        0 14px 28px rgba(10,132,255,0.55);
-      transform: translateY(1px);
-    }
-
-    /* Risk bar (small pills under nav) */
-    .risk-bar {
-      margin-top: 0.5rem;
-      margin-bottom: 0.7rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
     .risk-chip {
       display: inline-flex;
       align-items: center;
-      gap: 0.32rem;
-      font-size: 0.74rem;
-      padding: 0.18rem 0.7rem;
+      gap: 0.3rem;
       border-radius: 999px;
-      background: rgba(17, 18, 26, 0.98);
-      border: 1px solid var(--border-hairline);
-      color: var(--text-soft);
+      border: 1px solid var(--border-subtle);
+      background: rgba(10,12,30,0.95);
+      padding: 0.18rem 0.55rem;
+      font-size: 0.7rem;
     }
-
-    .risk-chip span.value {
-      color: var(--accent-strong);
+    .risk-chip .label {
+      color: var(--text-muted);
+    }
+    .risk-chip .value {
+      color: var(--text-main);
       font-variant-numeric: tabular-nums;
     }
+    .risk-chip.pl .value {
+      color: var(--success);
+    }
+    .risk-chip.pl.negative .value {
+      color: var(--danger);
+    }
 
-    .risk-chip.pl span.value {
-      color: var(--pill-pos-text);
+    .nav {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav button {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(10,12,30,0.92);
+      padding: 0.32rem 0.7rem;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .nav button span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(157,165,204,0.9);
+    }
+    .nav button.active {
+      border-color: #5b8bff;
+      color: var(--text-main);
+      background: radial-gradient(circle at top, var(--accent-soft), #090c1f);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.9),
+        0 0 20px rgba(91,139,255,0.6);
+    }
+    .nav button.active span.dot {
+      background: #5bffb1;
     }
 
     main {
-      margin-top: 0.35rem;
-    }
-
-    .sections {
-      min-height: 60vh;
-    }
-
-    .section {
-      display: none;
-      animation: fadeIn 0.18s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(2px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    #tab-home:checked ~ .shell main .section.home,
-    #tab-advisor:checked ~ .shell main .section.advisor,
-    #tab-post:checked ~ .shell main .section.post,
-    #tab-playbook:checked ~ .shell main .section.playbook,
-    #tab-profile:checked ~ .shell main .section.profile {
-      display: block;
-    }
-
-    /* Cards / layout */
-    .card {
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.06), transparent 55%),
-                  linear-gradient(180deg, rgba(22,22,30,0.96), rgba(10,10,15,0.98));
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-hairline);
-      padding: 1rem 1.15rem 1.1rem;
-      box-shadow: var(--shadow-soft);
-      margin-bottom: 0.85rem;
-    }
-
-    .card h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.45rem;
-    }
-
-    .card h3 {
-      font-size: 0.92rem;
-      font-weight: 600;
-      margin-bottom: 0.35rem;
-    }
-
-    .muted {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-    }
-
-    .grid-two {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 0.9rem;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
+      gap: 1rem;
     }
-
-    .grid-auto {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 0.65rem;
-    }
-
-    @media (max-width: 900px) {
-      header {
+    @media (max-width: 860px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header.app-header {
         flex-direction: column;
         align-items: flex-start;
       }
-      .grid-two {
-        grid-template-columns: minmax(0, 1fr);
+      .header-right {
+        align-items: flex-start;
+      }
+      .risk-summary {
+        justify-content: flex-start;
       }
     }
 
-    label.field {
-      font-size: 0.74rem;
+    .card {
+      background: linear-gradient(140deg, rgba(255,255,255,0.02), transparent);
+      border-radius: 0.9rem;
+      border: 1px solid var(--border-subtle);
+      padding: 0.9rem 1rem;
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.9);
+    }
+
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
+
+    /* Home screen */
+    .home-header {
+      margin-bottom: 0.7rem;
+    }
+    .home-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    .home-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.7rem;
+      margin-top: 0.7rem;
+    }
+    .home-tile {
+      border-radius: 0.8rem;
+      border: 1px solid var(--border-subtle);
+      background: radial-gradient(circle at top left, rgba(91,139,255,0.2), transparent 60%);
+      padding: 0.7rem 0.75rem;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+    .home-tile:hover {
+      transform: translateY(-2px);
+      border-color: #5b8bff;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.9),
+        0 14px 30px rgba(91,139,255,0.4);
+    }
+    .home-tile-icon {
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+    .home-tile-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+    .home-tile-text {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 0.18rem;
+    }
+    .tile-cta {
+      margin-top: 0.5rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(10,12,30,0.95);
+      color: var(--text-main);
+      font-size: 0.72rem;
+      padding: 0.28rem 0.7rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .tile-cta:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 14px rgba(91,139,255,0.6);
+    }
+
+    .right-pane-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+    .right-pane-text {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+    .right-pane-list {
+      font-size: 0.76rem;
+      padding-left: 1rem;
+      color: var(--text-muted);
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid var(--border-subtle);
+      margin: 0.8rem 0 0.7rem;
+    }
+
+    /* Advisor & Analyzer */
+    .section-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.55rem;
+      margin-bottom: 0.5rem;
+    }
+    label {
+      font-size: 0.76rem;
       color: var(--text-muted);
       display: flex;
       flex-direction: column;
       gap: 0.18rem;
     }
-
-    .field-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 0.4rem;
-    }
-
-    .req-pill {
-      font-size: 0.65rem;
-      padding: 0.06rem 0.48rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.2);
-      color: rgba(245,245,247,0.9);
-      background: rgba(255,255,255,0.04);
-      text-transform: lowercase;
-      letter-spacing: 0.03em;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    textarea {
-      background: var(--surface-soft);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-hairline);
-      padding: 0.42rem 0.6rem;
-      font-size: 0.8rem;
+    input, select, textarea {
+      font: inherit;
+      border-radius: 0.45rem;
+      border: 1px solid var(--border-subtle);
+      padding: 0.4rem 0.55rem;
+      background: var(--card-alt);
       color: var(--text-main);
-      font-family: inherit;
-      resize: vertical;
       outline: none;
     }
-
-    input::placeholder,
-    textarea::placeholder {
-      color: #5e5e73;
+    input:focus, select:focus, textarea:focus {
+      border-color: #5b8bff;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 16px rgba(91,139,255,0.5);
     }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--accent);
-      box-shadow:
-        0 0 0 1px rgba(0,0,0,0.9),
-        0 0 18px rgba(10,132,255,0.6);
-    }
-
     textarea {
-      min-height: 3.0rem;
+      resize: vertical;
+      min-height: 3.2rem;
+    }
+    .hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
     }
 
-    .hint {
-      font-size: 0.74rem;
-      color: var(--text-soft);
-      margin-top: 0.35rem;
+    .mode-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      border-radius: 999px;
+      border: 1px solid rgba(157,165,204,0.7);
+      padding: 0.14rem 0.6rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: #050713;
+      margin-bottom: 0.4rem;
+    }
+    .mode-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #5b8bff;
     }
 
     .btn-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem;
-      margin-top: 0.55rem;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
     }
-
-    button {
+    .btn-primary,
+    .btn-secondary {
       border-radius: 999px;
-      border: 1px solid transparent;
-      padding: 0.4rem 0.95rem;
-      font-size: 0.8rem;
+      border: 1px solid var(--border-subtle);
+      padding: 0.32rem 0.8rem;
+      font-size: 0.76rem;
       cursor: pointer;
-      font-weight: 500;
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
-      background: linear-gradient(135deg, var(--accent), #4da3ff);
-      color: #000;
-      box-shadow:
-        0 0 0 1px rgba(0,0,0,0.9),
-        0 18px 38px rgba(10,132,255,0.65);
-      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.05s ease;
+      gap: 0.25rem;
+      background: rgba(10,12,30,0.95);
+      color: var(--text-main);
     }
-
-    button.secondary {
-      background: rgba(25,26,35,0.96);
-      border-color: var(--border-hairline);
+    .btn-primary {
+      border-color: #5b8bff;
+      background: radial-gradient(circle at top, var(--accent-soft), #090c1f);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 16px rgba(91,139,255,0.6);
+    }
+    .btn-secondary {
       color: var(--text-muted);
-      box-shadow: none;
     }
 
-    button.pill-ghost {
-      background: rgba(18,18,26,0.96);
-      border-color: var(--border-hairline);
-      color: var(--text-soft);
-      font-size: 0.76rem;
-      box-shadow: none;
-    }
-
-    button:active {
-      transform: translateY(1px);
-      box-shadow:
-        0 10px 26px rgba(0,0,0,0.9);
-      filter: brightness(0.96);
-    }
-
-    .output {
-      background: var(--bg-alt);
-      border-radius: 14px;
-      border: 1px dashed var(--border-hairline);
-      padding: 0.6rem 0.75rem;
-      font-size: 0.78rem;
-      margin-top: 0.5rem;
-      white-space: pre-wrap;
+    /* Tables */
+    .table-wrapper {
+      margin-top: 0.6rem;
+      border-radius: 0.6rem;
+      border: 1px solid var(--border-subtle);
+      background: #090c1d;
+      padding: 0.4rem 0.45rem;
       max-height: 260px;
-      overflow-y: auto;
-      color: #f7f7ff;
+      overflow: auto;
     }
-
-    .output.empty {
-      color: #636371;
-      font-style: italic;
-    }
-
-    ul.list {
-      margin-left: 1.2rem;
-      margin-top: 0.4rem;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    /* Trade history table */
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.74rem;
-      margin-top: 0.4rem;
     }
-
     th, td {
-      padding: 0.28rem 0.35rem;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0.25rem 0.35rem;
+      border-bottom: 1px solid rgba(37, 42, 64, 0.9);
       text-align: left;
     }
-
     th {
-      color: var(--text-soft);
+      color: var(--text-muted);
       font-weight: 500;
       font-size: 0.72rem;
     }
-
     td {
       font-variant-numeric: tabular-nums;
     }
 
-    .footer-note {
-      margin-top: 0.4rem;
+    /* Playbook screen */
+    .pill-small {
       font-size: 0.7rem;
-      color: var(--text-soft);
-    }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(20,20,24,0.97);
       border-radius: 999px;
-      padding: 0.4rem 0.9rem;
-      font-size: 0.76rem;
-      color: var(--text-main);
-      border: 1px solid var(--border-hairline);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.18s ease, transform 0.18s ease;
-      z-index: 40;
-      box-shadow:
-        0 12px 30px rgba(0,0,0,0.9);
+      padding: 0.1rem 0.5rem;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .playbook-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.3fr);
+      gap: 0.7rem;
+    }
+    @media (max-width: 860px) {
+      .playbook-grid {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+    .list-header {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+    .playbook-list {
+      border-radius: 0.7rem;
+      border: 1px solid var(--border-subtle);
+      background: #090c1b;
+      padding: 0.5rem 0.55rem;
+      max-height: 270px;
+      overflow: auto;
+    }
+    .playbook-item {
+      padding: 0.4rem 0.35rem;
+      border-radius: 0.55rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.08rem;
+      transition: background 0.12s ease;
+    }
+    .playbook-item:hover {
+      background: #0f1427;
+    }
+    .playbook-item.active {
+      background: #151c35;
+      border-left: 2px solid #5b8bff;
+      padding-left: 0.45rem;
+    }
+    .playbook-item-title {
+      font-size: 0.8rem;
+    }
+    .playbook-item-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .playbook-detail {
+      border-radius: 0.7rem;
+      border: 1px solid var(--border-subtle);
+      background: #090c1b;
+      padding: 0.6rem 0.7rem;
+      font-size: 0.78rem;
+      min-height: 220px;
+    }
+    .playbook-detail h3 {
+      margin: 0 0 0.25rem;
+      font-size: 0.9rem;
+    }
+    .playbook-detail p {
+      margin: 0.18rem 0;
+    }
+    .playbook-bullets {
+      padding-left: 1rem;
+      margin: 0.1rem 0 0.2rem;
     }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+    footer {
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: center;
+      opacity: 0.88;
     }
-  .example-banner{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;gap:.8rem;align-items:center;justify-content:center;flex-wrap:wrap;padding:.75rem 1rem;background:rgba(5,5,7,.96);border-bottom:1px solid rgba(255,255,255,.14);color:#f5f5f7;font-size:.78rem}.example-banner span{max-width:820px;color:#a1a1b3}.example-banner a{color:#4da3ff;text-decoration:none;font-weight:700}.shell{margin-top:5rem}
-  html,body{max-width:100%;overflow-x:hidden}.example-banner *{min-width:0;overflow-wrap:anywhere}@media(max-width:640px){body{display:block;padding:5.8rem .6rem 1rem}.shell{width:100%;max-width:100%;margin-top:0;border-radius:22px}.grid,.card-grid,.main-grid,.two-col,.three-col,.content-grid,.layout{grid-template-columns:1fr!important}input,select,textarea,button{max-width:100%}}`r`n  </style>
+      .example-banner {
+      position: relative;
+      z-index: 11;
+      max-width: 1120px;
+      margin: 1rem auto 0;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(91,139,255,0.42);
+      background: rgba(10,12,30,0.96);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 0.75rem;
+      align-items: center;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+    .example-banner strong { color: var(--text-main); }
+    .example-banner a { color: #9ab7ff; text-decoration: none; white-space: nowrap; }
+    .example-banner a:hover { color: var(--text-main); }
+    @media (max-width: 760px) {
+      .example-banner { grid-template-columns: 1fr; margin: 0.75rem 0.75rem 0; }
+    }
+  </style>
 </head>
 <body>
-  <div class="example-banner"><strong>Example workspace demo</strong><span>EdgeDesk is running as an offline workspace shell for this demo. It does not connect to a broker, execute trades, or use live market data today. In a production deployment, this same workspace pattern could be wired to approved data sources, broker APIs, local tools, or CloudBeasts/lanOS workflows, subject to configuration, permissions, and compliance controls. Not financial advice.</span><a href="../">Back to CloudBeasts x lanOS</a></div>
-  <!-- Tabs state -->
-  <input type="radio" id="tab-home" name="tab" checked>
-  <input type="radio" id="tab-advisor" name="tab">
-  <input type="radio" id="tab-post" name="tab">
-  <input type="radio" id="tab-playbook" name="tab">
-  <input type="radio" id="tab-profile" name="tab">
+  <div class="example-banner"><strong>Example workspace demo</strong><span>EdgeDesk is running as an offline workspace shell for this demo. It does not connect to a broker, execute trades, or use live market data today. In a production deployment, this same workspace pattern could be wired to approved data sources, local tools, or CloudBeasts/lanOS workflows, subject to configuration, permissions, and compliance controls. Not financial advice.</span><a href="../">Back to CloudBeasts x lanOS</a></div>
+  <!-- Splash / loading -->
+  <div id="splash-screen">
+    <div class="splash-logo"><span>E</span></div>
+    <div class="splash-title">EdgeDesk v2</div>
+    <div class="splash-subtitle">
+      Opening an offline example workspace for Advisor, Risk, Bots, and Analyzer.
+    </div>
+    <div class="splash-loader"><span></span></div>
+  </div>
 
-  <div class="shell">
-    <header>
+  <!-- Main app -->
+  <div class="app-shell" id="app-shell">
+    <header class="app-header">
       <div class="brand">
-        <div class="brand-logo">EDGE</div>
+        <div class="brand-logo">E</div>
         <div class="brand-text">
-          <h1>EdgeDesk<span class="sub">AI Options Desk</span></h1>
-          <p>Plan, review and refine â€“ without leaving one clean workspace.</p>
+          <div class="brand-text-title">EdgeDesk v2</div>
+          <div class="brand-text-subtitle">Example workspace powered by CloudBeasts x lanOS</div>
         </div>
       </div>
-      <div class="header-tags">
-        <span class="tag">Advisor</span>
-        <span class="tag">Postâ€‘Trade Analyzer</span>
-        <span class="tag">Playbook</span>
-        <span class="tag">Offline demo - no live execution</span>
+      <div class="header-right">
+        <div class="risk-summary">
+          <div class="risk-chip">
+            <span class="label">Mode</span>
+            <span class="value" id="riskModeChip">NORMAL</span>
+          </div>
+          <div class="risk-chip">
+            <span class="label">Max day</span>
+            <span class="value" id="riskMaxDayChip">$400</span>
+          </div>
+          <div class="risk-chip">
+            <span class="label">Max/trade</span>
+            <span class="value" id="riskMaxTradeChip">$150</span>
+          </div>
+          <div class="risk-chip pl" id="riskDayChip">
+            <span class="label">Day P/L</span>
+            <span class="value" id="riskDayPLChip">+0</span>
+          </div>
+          <div class="risk-chip">
+            <span class="label">Demo</span>
+            <span class="value">Offline demo · no live execution</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <button data-screen-target="home" class="active">
+            <span class="dot"></span> Home
+          </button>
+          <button data-screen-target="advisor">
+            <span class="dot"></span> Advisor
+          </button>
+          <button data-screen-target="analyzer">
+            <span class="dot"></span> Post‑Trade
+          </button>
+          <button data-screen-target="playbook">
+            <span class="dot"></span> Playbook
+          </button>
+          <button data-screen-target="bots">
+            <span class="dot"></span> Bots
+          </button>
+          <button data-screen-target="logs">
+            <span class="dot"></span> Logs
+          </button>
+        </nav>
       </div>
     </header>
 
-    <!-- Segmented control nav -->
-    <div class="nav-wrapper">
-      <label class="nav-label" for="tab-home"><span class="icon">ðŸ </span>Home</label>
-      <label class="nav-label" for="tab-advisor"><span class="icon">ðŸ§­</span>Advisor</label>
-      <label class="nav-label" for="tab-post"><span class="icon">ðŸ“Š</span>Postâ€‘Trade</label>
-      <label class="nav-label" for="tab-playbook"><span class="icon">ðŸ“š</span>Playbook</label>
-      <label class="nav-label" for="tab-profile"><span class="icon">âš™ï¸</span>Profile</label>
-    </div>
-
-    <!-- Risk summary bar -->
-    <div class="risk-bar">
-      <div class="risk-chip">
-        Risk mode:
-        <span class="value" id="riskModeDisplay">NORMAL</span>
-      </div>
-      <div class="risk-chip">
-        Max daily loss:
-        <span class="value" id="maxDayLossDisplay">$400</span>
-      </div>
-      <div class="risk-chip">
-        Max perâ€‘trade:
-        <span class="value" id="maxTradeLossDisplay">$150</span>
-      </div>
-      <div class="risk-chip pl">
-        Day P/L:
-        <span class="value" id="dayPLDisplay">$0</span>
-      </div>
-    </div>
-
     <main>
-      <div class="sections">
-        <!-- HOME -->
-        <section class="section home">
-          <div class="card">
-            <h2>Welcome to EdgeDesk</h2>
-            <p class="muted">
-              Three passes through the day:
-            </p>
-            <ul class="list">
-              <li><strong>Before:</strong> use <em>Advisor</em> to shape the plan.</li>
-              <li><strong>After:</strong> use <em>Postâ€‘Trade</em> to grade the reality.</li>
-              <li><strong>Outside of heat:</strong> use <em>Playbook</em> to tune the edge itself.</li>
-            </ul>
-            <div class="btn-row" style="margin-top:0.75rem;">
-              <label for="tab-advisor"><button type="button">ðŸ§­ Go to Advisor</button></label>
-              <label for="tab-post"><button type="button" class="secondary">ðŸ“Š Go to Postâ€‘Trade</button></label>
+      <!-- LEFT: main screens -->
+      <section class="card">
+        <!-- Home -->
+        <div class="screen active" data-screen="home">
+          <div class="home-header">
+            <div class="home-title">What do you want to do right now?</div>
+            <div class="home-subtitle">
+              Plan with the Advisor, review with the Analyzer, study the Playbook, or manage your bots.
             </div>
-            <p class="footer-note">
-              This is still a static spec â€“ later, the buttons will talk to your FastAPI endpoints for signals,
-              advisor intents, risk snapshots and trade logs.
-            </p>
           </div>
-        </section>
-
-        <!-- ADVISOR -->
-        <section class="section advisor">
-          <div class="card">
-            <h2>Advisor Â· Plan a Trade</h2>
-            <p class="muted">
-              Step 1: session risk. Step 2: symbol & idea. Step 3: generate a clean prompt for the Advisor agent.
-            </p>
-          </div>
-
-          <div class="grid-two">
-            <div class="card">
-              <h3>1 Â· Session &amp; Risk</h3>
-              <div class="btn-row" style="margin-top:0;">
-                <button type="button" class="pill-ghost" onclick="applyPreset('CONSERVATIVE')">Conservative</button>
-                <button type="button" class="pill-ghost" onclick="applyPreset('NORMAL')">Normal</button>
-                <button type="button" class="pill-ghost" onclick="applyPreset('AGGRESSIVE')">Aggressive</button>
+          <div class="home-grid">
+            <div class="home-tile" data-screen-jump="advisor">
+              <div class="home-tile-icon">🧭</div>
+              <div class="home-tile-title">Plan a trade (Advisor)</div>
+              <div class="home-tile-text">
+                Define risk, symbol, and idea. Get structured zones, grades, and management logic.
               </div>
-              <div class="grid-auto" style="margin-top:0.6rem;">
-                <label class="field">
-                  <div class="field-header">
-                    <span>Risk mode</span>
-                    <span class="req-pill">required</span>
-                  </div>
-                  <select id="advRiskMode">
-                    <option value="CONSERVATIVE">CONSERVATIVE</option>
-                    <option value="NORMAL" selected>NORMAL</option>
-                    <option value="AGGRESSIVE">AGGRESSIVE</option>
-                  </select>
-                </label>
-                <label class="field">
-                  <div class="field-header">
-                    <span>Max loss per trade ($ or %)</span>
-                    <span class="req-pill">recommended</span>
-                  </div>
-                  <input type="text" id="advMaxLoss" placeholder="-150 or -1%" />
-                </label>
-                <label class="field">
-                  <div class="field-header">
-                    <span>Max loss for day ($ or %)</span>
-                    <span class="req-pill">recommended</span>
-                  </div>
-                  <input type="text" id="advMaxDayLoss" placeholder="-400 or -3%" />
-                </label>
-              </div>
-              <label class="field" style="margin-top:0.5rem;">
-                <span>Session notes</span>
-                <textarea id="advSessionNotes" placeholder="First 90m only, no trades into major news, feeling slightly riskâ€‘averse..."></textarea>
-              </label>
+              <button class="tile-cta" type="button" data-screen-jump="advisor">Go to Advisor</button>
             </div>
-
-            <div class="card">
-              <h3>2 Â· Symbol &amp; Idea</h3>
-              <div class="grid-auto">
-                <label class="field">
-                  <div class="field-header">
-                    <span>Symbol</span>
-                    <span class="req-pill">required</span>
-                  </div>
-                  <input type="text" id="advSymbol" placeholder="SPY, TSLA, NVDA..." />
-                </label>
-                <label class="field">
-                  <span>Timeframe focus</span>
-                  <input type="text" id="advTimeframe" placeholder="5m trend, 1H context, etc." />
-                </label>
+            <div class="home-tile" data-screen-jump="analyzer">
+              <div class="home-tile-icon">📊</div>
+              <div class="home-tile-title">Review a trade (Post‑Trade)</div>
+              <div class="home-tile-text">
+                Log entry/exit, size, and context. See session P&L update in the header.
               </div>
-              <label class="field" style="margin-top:0.5rem;">
-                <div class="field-header">
-                  <span>Idea / hypothesis</span>
-                  <span class="req-pill">required</span>
-                </div>
-                <textarea id="advIdea" placeholder="Looking for continuation higher above yesterday's high with VWAP support..."></textarea>
-              </label>
-              <div class="grid-auto" style="margin-top:0.5rem;">
-                <label class="field">
-                  <span>Desired DTE window</span>
-                  <input type="text" id="advDte" placeholder="0DTE, 1â€“3 DTE, monthly..." />
-                </label>
-                <label class="field">
-                  <span>Rough contract price</span>
-                  <input type="number" step="0.01" id="advContractPrice" placeholder="2.50" />
-                </label>
-                <label class="field">
-                  <span>Target R:R</span>
-                  <input type="text" id="advRR" placeholder="1:2 or 1:3" />
-                </label>
+              <button class="tile-cta" type="button" data-screen-jump="analyzer">Go to Post‑Trade</button>
+            </div>
+            <div class="home-tile" data-screen-jump="playbook">
+              <div class="home-tile-icon">📚</div>
+              <div class="home-tile-title">Study playbook & setups</div>
+              <div class="home-tile-text">
+                Browse your strategies and patterns – the core of your edge – in a structured way.
               </div>
+              <button class="tile-cta" type="button" data-screen-jump="playbook">Go to Playbook</button>
+            </div>
+            <div class="home-tile" data-screen-jump="bots">
+              <div class="home-tile-icon">🤖</div>
+              <div class="home-tile-title">Manage bots & autonomy</div>
+              <div class="home-tile-text">
+                Per‑symbol autonomy (OFF / SIGNAL_ONLY / HYBRID / AUTO), plus a panic button and hard rules.
+              </div>
+              <button class="tile-cta" type="button" data-screen-jump="bots">Go to Bots</button>
             </div>
           </div>
+        </div>
 
-          <div class="card">
-            <h3>3 Â· Advisor Prompt</h3>
-            <p class="hint">
-              â€œBuildâ€ turns todayâ€™s risk + idea into a single instruction you can paste into your Advisor agent.
-            </p>
-            <div class="btn-row">
-              <button type="button" id="buildAdvPromptBtn">ðŸ§  Build Advisor Prompt</button>
-              <button type="button" class="secondary" id="copyAdvPromptBtn">ðŸ“‹ Copy</button>
-            </div>
-            <div id="advPromptOutput" class="output empty">Advisor prompt will appear here.</div>
+        <!-- Advisor -->
+        <div class="screen" data-screen="advisor">
+          <div class="section-title">Advisor · Pre‑Trade Planning</div>
+          <div class="mode-pill" data-mode-badge="advisor">Mode: NORMAL</div>
+          <p class="hint">
+            Tell the system how you want to trade <em>today</em> and for this idea: symbol, risk, style, and mental
+            state. The real Advisor agent will output a plan in the right‑hand pane.
+          </p>
+          <div class="field-row">
+            <label>
+              Symbol
+              <input id="advSymbol" type="text" placeholder="TSLA, SPY, NVDA..." />
+            </label>
+            <label>
+              Style
+              <select id="advStyle">
+                <option>SCALP_OPTIONS</option>
+                <option>INTRADAY_SWING_OPTIONS</option>
+                <option>LOTTOS_ONLY</option>
+                <option>COMMON_STOCK_SCALP</option>
+              </select>
+            </label>
           </div>
-        </section>
+          <div class="field-row">
+            <label>
+              Risk mode
+              <select id="advRiskModeSelect">
+                <option value="NORMAL">NORMAL</option>
+                <option value="CONSERVATIVE">CONSERVATIVE</option>
+                <option value="AGGRESSIVE">AGGRESSIVE</option>
+              </select>
+            </label>
+            <label>
+              Max daily loss
+              <input id="advMaxDailyLossInput" type="text" placeholder="-400 USD" />
+            </label>
+          </div>
+          <div class="field-row">
+            <label>
+              Mental state
+              <select id="advMental">
+                <option>DIALED_IN</option>
+                <option>OKAY</option>
+                <option>STRESSED</option>
+                <option>TIRED</option>
+              </select>
+            </label>
+            <label>
+              Setup filter
+              <select id="advSetupFilter">
+                <option>A &amp; B setups only</option>
+                <option>A+ only</option>
+                <option>A/B/C allowed</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            Idea notes (optional)
+            <textarea id="advIdea" placeholder="Describe the setup in your language – trend pullback, breakout, reversal, etc."></textarea>
+          </label>
+          <p class="hint">
+            In this offline demo, clicking <strong>Run Advisor</strong> builds a local preview response on the right: zones, contract templates, scaling rules, and a short narrative.
+          </p>
+          <div class="btn-row">
+            <button class="btn-primary" type="button" id="runAdvisorStub">Run Advisor</button>
+          </div>
+        </div>
 
-        <!-- POSTâ€‘TRADE -->
-        <section class="section post">
-          <div class="card">
-            <h2>Postâ€‘Trade Analyzer Â· Review a Trade</h2>
-            <p class="muted">
-              Capture the numbers, context and headspace. The Analyzer agent turns that into grades and lessons.
-            </p>
+        <!-- Post‑Trade Analyzer -->
+        <div class="screen" data-screen="analyzer">
+          <div class="section-title">Post‑Trade Analyzer · Session P&amp;L</div>
+          <div class="mode-pill" data-mode-badge="analyzer">Mode: NORMAL</div>
+          <p class="hint">
+            Quick per‑trade log for the current session. Each row updates the green Day P&L chip in the header.
+          </p>
+
+          <div class="field-row">
+            <label>
+              Symbol
+              <input type="text" id="thSymbol" placeholder="TSLA" />
+            </label>
+            <label>
+              Direction
+              <select id="thDirection">
+                <option value="LONG">LONG</option>
+                <option value="SHORT">SHORT</option>
+              </select>
+            </label>
+          </div>
+          <div class="field-row">
+            <label>
+              Size (contracts / shares)
+              <input type="number" id="thSize" min="1" step="1" placeholder="2" />
+            </label>
+            <label>
+              Entry
+              <input type="number" id="thEntry" step="0.01" placeholder="1.05" />
+            </label>
+            <label>
+              Exit
+              <input type="number" id="thExit" step="0.01" placeholder="4.00" />
+            </label>
+          </div>
+          <label>
+            Notes
+            <input type="text" id="thNotes" placeholder="TSLA 430C lotto squeeze..." />
+          </label>
+
+          <div class="btn-row">
+            <button class="btn-primary" type="button" onclick="addTrade()">➕ Add trade</button>
+            <button class="btn-secondary" type="button" onclick="clearTrades()">🗑 Clear history</button>
           </div>
 
-          <div class="grid-two">
-            <div class="card">
-              <h3>1 Â· Trade Details</h3>
-              <div class="grid-auto">
-                <label class="field">
-                  <div class="field-header">
-                    <span>Symbol</span>
-                    <span class="req-pill">required</span>
-                  </div>
-                  <input type="text" id="ptSymbol" placeholder="TSLA, SPY..." />
-                </label>
-                <label class="field">
-                  <span>Direction</span>
-                  <select id="ptDirection">
-                    <option value="LONG">LONG</option>
-                    <option value="SHORT">SHORT</option>
-                  </select>
-                </label>
-                <label class="field">
-                  <span>Size (contracts or shares)</span>
-                  <input type="number" id="ptSize" min="1" step="1" placeholder="2" />
-                </label>
-              </div>
-              <div class="grid-auto" style="margin-top:0.5rem;">
-                <label class="field">
-                  <span>Entry price</span>
-                  <input type="number" id="ptEntry" step="0.01" placeholder="1.05 (for options)" />
-                </label>
-                <label class="field">
-                  <span>Exit price</span>
-                  <input type="number" id="ptExit" step="0.01" placeholder="4.00" />
-                </label>
-                <label class="field">
-                  <span>Realized P/L ($)</span>
-                  <input type="number" id="ptPL" step="0.01" placeholder="leave blank to autoâ€‘calc" />
-                </label>
-              </div>
-            </div>
-
-            <div class="card">
-              <h3>2 Â· Context &amp; Selfâ€‘Assessment</h3>
-              <label class="field">
-                <span>Setup / playbook tag</span>
-                <input type="text" id="ptSetup" placeholder="Trend pullback, Lotto squeeze, Opening drive..." />
-              </label>
-              <label class="field">
-                <span>Did you follow your plan?</span>
-                <textarea id="ptPlanFollow" placeholder="What was the plan, and where did you stick to or break it?"></textarea>
-              </label>
-              <label class="field">
-                <span>Emotional notes</span>
-                <textarea id="ptEmotion" placeholder="Fear, FOMO, boredom, revenge, overconfidence..."></textarea>
-              </label>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>3 Â· Analyzer Prompt</h3>
-            <p class="hint">
-              Build this prompt and drop it into your Analyzer agent. Keep the output next to the trade in your log.
-            </p>
-            <div class="btn-row">
-              <button type="button" id="buildPtPromptBtn">ðŸ“Š Build Postâ€‘Trade Prompt</button>
-              <button type="button" class="secondary" id="copyPtPromptBtn">ðŸ“‹ Copy</button>
-            </div>
-            <div id="ptPromptOutput" class="output empty">Postâ€‘Trade Analyzer prompt will appear here.</div>
-          </div>
-
-          <div class="card">
-            <h3>Optional Â· Session Trade History</h3>
-            <p class="hint">
-              Quick running log. P/L assumes options (Ã—100) if you provide entry, exit and contracts.
-            </p>
-            <div class="grid-auto">
-              <label class="field">
-                <span>Symbol</span>
-                <input type="text" id="thSymbol" placeholder="TSLA" />
-              </label>
-              <label class="field">
-                <span>Direction</span>
-                <select id="thDirection">
-                  <option value="LONG">LONG</option>
-                  <option value="SHORT">SHORT</option>
-                </select>
-              </label>
-              <label class="field">
-                <span>Size</span>
-                <input type="number" id="thSize" min="1" step="1" placeholder="2" />
-              </label>
-              <label class="field">
-                <span>Entry</span>
-                <input type="number" id="thEntry" step="0.01" placeholder="1.05" />
-              </label>
-              <label class="field">
-                <span>Exit</span>
-                <input type="number" id="thExit" step="0.01" placeholder="4.00" />
-              </label>
-              <label class="field">
-                <span>Notes</span>
-                <input type="text" id="thNotes" placeholder="TSLA 430C lotto squeeze..." />
-              </label>
-            </div>
-            <div class="btn-row">
-              <button type="button" onclick="addTrade()">âž• Add trade</button>
-              <button type="button" class="secondary" onclick="clearTrades()">ðŸ—‘ Clear history</button>
-            </div>
-
+          <div class="table-wrapper">
             <table>
               <thead>
                 <tr>
@@ -817,431 +867,830 @@
               <tbody id="tradeTableBody"></tbody>
             </table>
           </div>
-        </section>
+        </div>
 
-        <!-- PLAYBOOK -->
-        <section class="section playbook">
-          <div class="card">
-            <h2>Playbook Â· Strategies &amp; Setups</h2>
-            <p class="muted">
-              Each entry here is something you actually trade: preâ€‘conditions, entries, stops, targets and â€œdonâ€™t do
-              thisâ€ notes.
-            </p>
+        <!-- Playbook -->
+        <div class="screen" data-screen="playbook">
+          <div class="section-title">Playbook &amp; Setups · Knowledge Base View</div>
+          <p class="hint">
+            This is the edge layer: structured strategies and patterns. The UI below is how you’d browse,
+            edit, and link setups to real trades.
+          </p>
+          <div class="pill-small">
+            <span>☑</span> Strategies + patterns only for now
           </div>
-
-          <div class="grid-two">
-            <div class="card">
-              <h3>Playbook Entry (Editor)</h3>
-              <label class="field">
-                <div class="field-header">
-                  <span>Setup name</span>
-                  <span class="req-pill">required</span>
+          <div class="playbook-grid">
+            <div>
+              <div class="list-header">Strategies (named playbook entries)</div>
+              <div class="playbook-list" id="strategy-list">
+                <div class="playbook-item active" data-strategy="tsla_trend_pullback">
+                  <div class="playbook-item-title">TSLA Trend Pullback Scalp</div>
+                  <div class="playbook-item-meta">
+                    Style: SCALP_OPTIONS · Pattern: Trend pullback to VWAP
+                  </div>
                 </div>
-                <input type="text" id="pbName" placeholder="SPY Trend Pullback Â· TSLA Lotto Squeeze" />
-              </label>
-              <label class="field">
-                <span>Market conditions required</span>
-                <textarea id="pbConditions" placeholder="Strong trend on 15m/1H, above VWAP, no major event in next 30m..."></textarea>
-              </label>
-              <label class="field">
-                <span>Entry logic</span>
-                <textarea id="pbEntry" placeholder="Exactly where do you enter? Retest, candle signal, volume pop..."></textarea>
-              </label>
-              <div class="grid-auto">
-                <label class="field">
-                  <span>Stop logic</span>
-                  <textarea id="pbStop" placeholder="Invalidation level, structure break, time stop..."></textarea>
-                </label>
-                <label class="field">
-                  <span>Targets</span>
-                  <textarea id="pbTargets" placeholder="First target, partials, runner exit..."></textarea>
-                </label>
-              </div>
-              <label class="field">
-                <span>Common mistakes / warnings</span>
-                <textarea id="pbWarnings" placeholder="Chasing late, adding into vertical spikes, trading into news..."></textarea>
-              </label>
-              <div class="btn-row">
-                <button type="button" id="buildPbSnippetBtn">ðŸ“š Build playbook snippet</button>
-                <button type="button" class="secondary" id="copyPbSnippetBtn">ðŸ“‹ Copy</button>
+                <div class="playbook-item" data-strategy="spy_open_drive">
+                  <div class="playbook-item-title">SPY Open Drive Fade</div>
+                  <div class="playbook-item-meta">
+                    Style: INTRADAY_SWING_OPTIONS · Pattern: Failed opening drive
+                  </div>
+                </div>
+                <div class="playbook-item" data-strategy="nvda_breakout">
+                  <div class="playbook-item-title">NVDA Breakout Continuation</div>
+                  <div class="playbook-item-meta">
+                    Style: SCALP_OPTIONS · Pattern: Breakout from consolidation
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div class="card">
-              <h3>Playbook Snippet</h3>
-              <p class="hint">
-                This is the structured text your agents or KB will consume. Store it in your knowledge base or Advisor context.
-              </p>
-              <div id="pbSnippetOutput" class="output empty">
-                Playbook entry snippet will appear here.
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- PROFILE & RISK -->
-        <section class="section profile">
-          <div class="card">
-            <h2>Profile &amp; Risk Settings</h2>
-            <p class="muted">
-              Think of this as the personal Risk Engine the rest of the system must respect.
-            </p>
-          </div>
-
-          <div class="grid-two">
-            <div class="card">
-              <h3>Risk Profile</h3>
-              <div class="btn-row" style="margin-top:0;">
-                <button type="button" class="pill-ghost" onclick="applyPreset('CONSERVATIVE')">Conservative preset</button>
-                <button type="button" class="pill-ghost" onclick="applyPreset('NORMAL')">Normal preset</button>
-                <button type="button" class="pill-ghost" onclick="applyPreset('AGGRESSIVE')">Aggressive preset</button>
-              </div>
-              <div class="grid-auto" style="margin-top:0.6rem;">
-                <label class="field">
-                  <span>Default risk mode</span>
-                  <select id="riskModeInput">
-                    <option value="CONSERVATIVE">CONSERVATIVE</option>
-                    <option value="NORMAL" selected>NORMAL</option>
-                    <option value="AGGRESSIVE">AGGRESSIVE</option>
-                  </select>
-                </label>
-                <label class="field">
-                  <span>Max daily loss ($)</span>
-                  <input type="number" id="riskMaxDayInput" placeholder="400" />
-                </label>
-                <label class="field">
-                  <span>Max perâ€‘trade loss ($)</span>
-                  <input type="number" id="riskMaxTradeInput" placeholder="150" />
-                </label>
-              </div>
-              <label class="field" style="margin-top:0.5rem;">
-                <span>Hard noâ€‘trade rules</span>
-                <textarea id="riskRulesInput" placeholder="No trading first 5m after open, avoid 10m preâ€‘FOMC, no revenge after max loss..."></textarea>
-              </label>
-              <div class="btn-row">
-                <button type="button" onclick="applyRiskSettings()">ðŸ’¾ Apply to risk bar &amp; Advisor</button>
-              </div>
-            </div>
-
-            <div class="card">
-              <h3>AI Employees (Concept)</h3>
-              <ul class="list">
-                <li><strong>Data Expert:</strong> price action, structure, volatility, options flow.</li>
-                <li><strong>News Researcher:</strong> catalysts, earnings, macro events.</li>
-                <li><strong>Sentiment Analyst:</strong> positioning and crowd mood.</li>
-                <li><strong>Advisor:</strong> merges perception + risk into trade plans.</li>
-                <li><strong>Postâ€‘Trade Analyzer:</strong> graded report cards and lessons.</li>
+            <div class="playbook-detail" id="strategy-detail">
+              <h3>TSLA Trend Pullback Scalp</h3>
+              <p><strong>Instrument:</strong> TSLA options (liquid, near‑ATM strikes)</p>
+              <p><strong>Style:</strong> SCALP_OPTIONS · intraday only, no holds through major news</p>
+              <p><strong>Core pattern:</strong> Uptrend + controlled pullback to VWAP / prior breakout level</p>
+              <p><strong>Preconditions:</strong></p>
+              <ul class="playbook-bullets">
+                <li>TSLA in clear intraday uptrend (higher highs &amp; higher lows on 5m).</li>
+                <li>Price trading above VWAP and key prior support from the session.</li>
+                <li>Broader market (SPY/QQQ) not in active breakdown.</li>
               </ul>
-              <p class="footer-note">
-                Eventually this screen maps straight into your orchestrator config JSON for semiâ€‘auto and auto modes.
-              </p>
+              <p><strong>Entry rules:</strong></p>
+              <ul class="playbook-bullets">
+                <li>Wait for pullback into marked VWAP/support zone – no entries mid‑dump.</li>
+                <li>Enter only on a clean bounce candle that holds higher lows.</li>
+                <li>Use near‑ATM calls (no far‑lotto strikes for this baseline strategy).</li>
+              </ul>
+              <p><strong>Exit / management:</strong></p>
+              <ul class="playbook-bullets">
+                <li>First target is retest of prior intraday high; scale out into that push.</li>
+                <li>Cut quickly if price loses VWAP + prior swing low (thesis broken).</li>
+                <li>Avoid overstaying through sudden news or macro events.</li>
+              </ul>
+              <p><strong>Grade mapping:</strong> A if trend + level + bounce are all clean; B if one element is messy;
+                C or lower if structure is unclear or market context disagrees.</p>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+
+        <!-- Bots & Autonomy -->
+        <div class="screen" data-screen="bots">
+          <div class="section-title">Bots &amp; Autonomy · Single‑User Control Panel</div>
+          <div class="mode-pill" data-mode-badge="bots">Mode: NORMAL</div>
+          <p class="hint">
+            This is where you control automation per symbol/strategy. Modes: OFF, SIGNAL_ONLY, HYBRID, and AUTO. In this public demo everything stays local.
+          </p>
+
+          <div class="field-row">
+            <label>
+              0DTE rule (AUTO/HYBRID)
+              <select id="bots0dteRule">
+                <option value="ENFORCED" selected>Close by 3:30pm, no new 0DTE after 3:20pm</option>
+                <option value="DISABLED">Disabled (manual only)</option>
+              </select>
+            </label>
+            <label>
+              Open rule (AUTO/HYBRID)
+              <select id="botsOpenRule">
+                <option value="SKIP_FIRST_MINUTE" selected>Skip first 1 min after open</option>
+                <option value="NO_RESTRICTION">No restriction (manual risk)</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Bot</th>
+                  <th>Symbol</th>
+                  <th>Strategy</th>
+                  <th>Mode</th>
+                  <th>Status</th>
+                  <th>Day P/L</th>
+                </tr>
+              </thead>
+              <tbody id="botsTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-primary" type="button" id="panicButton">⛔ Panic: flatten &amp; stop bots</button>
+            <button class="btn-secondary" type="button" id="allSignalOnlyButton">Set all to SIGNAL_ONLY</button>
+          </div>
+          <p class="hint">
+            For now this only updates local state. In production, mode changes and the panic button could connect to approved workflow, execution, or CloudBeasts/lanOS controls.
+          </p>
+        </div>
+
+        <!-- Logs & Alerts -->
+        <div class="screen" data-screen="logs">
+          <div class="section-title">System Logs &amp; Alerts</div>
+          <div class="mode-pill" data-mode-badge="logs">Mode: NORMAL</div>
+          <p class="hint">
+            View a timeline of what the desk is doing: intent approvals, veto reasons, IBKR errors, risk events, and
+            your own mode changes. This is crucial for trusting a fully autonomous scalper.
+          </p>
+
+          <div class="field-row">
+            <label>
+              Filter by symbol
+              <input id="logsSymbolFilter" type="text" placeholder="TSLA, NVDA, SPY..." />
+            </label>
+            <label>
+              Severity
+              <select id="logsLevelFilter">
+                <option value="">All</option>
+                <option value="INFO">INFO</option>
+                <option value="WARN">WARN</option>
+                <option value="ERROR">ERROR</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Level</th>
+                  <th>Source</th>
+                  <th>Symbol</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+              <tbody id="logsTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-secondary" type="button" id="addFakeLog">➕ Add fake log (dev)</button>
+            <button class="btn-secondary" type="button" id="clearLogs">🗑 Clear logs</button>
+          </div>
+          <p class="hint">
+            In production, approved data sources or workflow services could POST real events here, such as blocked intents, risk changes, or mode updates.
+          </p>
+        </div>
+      </section>
+
+      <!-- RIGHT: contextual info pane -->
+      <section class="card">
+        <!-- Home right -->
+        <div class="screen active" data-screen="home">
+          <div class="right-pane-title">Desk Overview</div>
+          <p class="right-pane-text">
+            EdgeDesk v2 is a single‑user intraday options desk. The UI is split into:
+          </p>
+          <ul class="right-pane-list">
+            <li><strong>Advisor:</strong> pre‑trade planning and intraday management logic.</li>
+            <li><strong>Post‑Trade:</strong> trade report cards and day P&amp;L.</li>
+            <li><strong>Playbook:</strong> strategies and patterns – your encoded edge.</li>
+            <li><strong>Bots:</strong> automation modes per symbol/strategy + panic.</li>
+            <li><strong>Logs:</strong> everything the system does, for trust and debugging.</li>
+          </ul>
+          <p class="right-pane-text">
+            This file is still offline: it does not call live market data, broker APIs, or external workflow services. The Advisor button renders a local preview only.
+          </p>
+
+          <hr class="divider" />
+
+          <div class="right-pane-title">Profile &amp; risk (local)</div>
+          <p class="right-pane-text">
+            These settings feed the header bar and the tiny mode indicators on Advisor/Post‑Trade/Bots/Logs.
+            They act like a local Risk Engine – no backend required.
+          </p>
+          <div class="field-row">
+            <label>
+              Risk mode
+              <select id="profileRiskMode">
+                <option value="CONSERVATIVE">Conservative</option>
+                <option value="NORMAL" selected>Normal</option>
+                <option value="AGGRESSIVE">Aggressive</option>
+              </select>
+            </label>
+            <label>
+              Max daily loss ($)
+              <input id="profileMaxDay" type="number" placeholder="400" />
+            </label>
+            <label>
+              Max per‑trade loss ($)
+              <input id="profileMaxTrade" type="number" placeholder="150" />
+            </label>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" type="button" id="applyProfileBtn">Apply to risk bar &amp; Advisor</button>
+          </div>
+        </div>
+
+        <!-- Advisor right -->
+        <div class="screen" data-screen="advisor">
+          <div class="right-pane-title">Advisor Output</div>
+          <p class="right-pane-text">
+            <strong>Session mode:</strong> <span id="advisorModeInline">NORMAL</span>.
+          </p>
+          <p class="right-pane-text">
+            When you click <strong>Run Advisor</strong>, the UI:
+          </p>
+          <ul class="right-pane-list">
+            <li>Collects your symbol, style, risk mode, mental state and idea.</li>
+            <li>Builds a local preview payload from the current workspace state.</li>
+            <li>Renders sample JSON locally without sending data to a broker or external service.</li>
+          </ul>
+          <p class="right-pane-text">
+            The local preview JSON appears here.
+          </p>
+          <pre id="advisorOutputBox" class="advisor-json-output">{ "status": "idle", "details": "Run Advisor to build a local preview." }</pre>
+        </div>
+        
+        <!-- Analyzer right -->
+        <div class="screen" data-screen="analyzer">
+          <div class="right-pane-title">Example Trade Tile</div>
+          <p class="right-pane-text">
+            As you log trades and your Analyzer agent runs, it can generate tiles like this and link them
+            back to specific playbook entries.
+          </p>
+          <div class="table-wrapper" style="max-height:none;">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.3rem;">
+                <div style="font-weight:600;font-size:0.82rem;">TSLA 430C Lotto – Canonical Win</div>
+                <span style="border-radius:999px;padding:0.12rem 0.45rem;border:1px solid rgba(50,212,122,0.8);font-size:0.7rem;color:var(--success);">+590 realized</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:0.14rem;">
+                <span style="color:var(--text-muted);">Entry / Exit</span>
+                <span>1.05 → 4.00 · 2x</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:0.14rem;">
+                <span style="color:var(--text-muted);">Setup grade</span>
+                <span>B / B+ (lotto)</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:0.3rem;">
+                <span style="color:var(--text-muted);">Execution grade</span>
+                <span>A (sold into strength)</span>
+              </div>
+              <p class="right-pane-text" style="margin-bottom:0.3rem;">
+                Entered early, sold into the squeeze toward 430, then avoided the rug pull.
+                This is stored as a <strong>positive canonical example</strong> in your Playbook.
+              </p>
+              <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">LOTTOS</span>
+                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">GOOD_BEHAVIOR</span>
+                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">GIFT_ZONE_EXIT</span>
+              </div>
+            </div>
+          </div>
+          <p class="right-pane-text" style="margin-top:0.5rem;">
+            The Day P&L chip in the header updates as you log trades on the left. In a live version,
+            the Analyzer agent would also track streaks, mistakes, and playbook alignment.
+          </p>
+        </div>
+
+        <!-- Playbook right -->
+        <div class="screen" data-screen="playbook">
+          <div class="right-pane-title">Why the Playbook Matters for Automation</div>
+          <p class="right-pane-text">
+            The Playbook is the first slice of your knowledge base. It captures:
+          </p>
+          <ul class="right-pane-list">
+            <li><strong>Strategies:</strong> named playbook entries tied to real trades.</li>
+            <li><strong>Patterns:</strong> price structures the strategies rely on.</li>
+            <li><strong>Grade rules:</strong> what makes a setup A, B, or C for you.</li>
+          </ul>
+          <p class="right-pane-text">
+            Even though bots are configurable per symbol/strategy, the Advisor and scalper should still check:
+            “Does this idea even fit a defined playbook entry?”
+          </p>
+        </div>
+
+        <!-- Bots right -->
+        <div class="screen" data-screen="bots">
+          <div class="right-pane-title">Bots &amp; Hard Rules</div>
+          <p class="right-pane-text">
+            This panel explains how automation should behave once wired:
+          </p>
+          <ul class="right-pane-list">
+            <li><strong>Modes:</strong> SIGNAL_ONLY (no orders), HYBRID (only A‑grade auto), AUTO (all eligible setups).</li>
+            <li><strong>Time rules:</strong> never trade the first minute after open; never hold 0DTE past 3:30pm in AUTO/HYBRID.</li>
+            <li><strong>Panic:</strong> cancels open orders, flattens positions, and forces all bots to SIGNAL_ONLY.</li>
+          </ul>
+          <p class="right-pane-text">
+            In production, this could connect to approved workflows listening for mode changes and a dedicated safety control. The logic is simple; the discipline comes from respecting it.
+          </p>
+        </div>
+
+        <!-- Logs right -->
+        <div class="screen" data-screen="logs">
+          <div class="right-pane-title">What Gets Logged</div>
+          <p class="right-pane-text">
+            When connected to approved workflows, each important event becomes a log entry:
+          </p>
+          <ul class="right-pane-list">
+            <li>New signal/intent generated (symbol, grade, RR, news gate).</li>
+            <li>Intent <strong>approved</strong> or <strong>vetoed</strong> by risk (and why).</li>
+            <li>Order placement, partial fills, cancels, and auto‑exits.</li>
+            <li>Risk events: max daily loss reached, mode changes, panic triggered.</li>
+          </ul>
+          <p class="right-pane-text">
+            This makes it possible to answer “Why didn’t the bot take that trade?” or “Why did it stop trading?” in
+            plain English.
+          </p>
+        </div>
+      </section>
     </main>
 
-    <p class="footer-note">
-      EdgeDesk is an offline demo shell. It does not use live market data, connect to a broker, or execute trades today. It demonstrates how a specialized workspace could be connected to approved data, execution, local compute, or CloudBeasts/lanOS workflows in a production deployment.</p>
+    <footer>
+      EdgeDesk is an offline demo shell. It does not use live market data, connect to a broker, or execute trades today. It demonstrates how a specialized workspace could be connected to approved data, execution, local compute, or CloudBeasts/lanOS workflows in a production deployment.
+    </footer>
   </div>
 
-  <!-- Toast -->
-  <div id="toast" class="toast"></div>
-
   <script>
-    /* Utility helpers */
-    function setOutput(el, text) {
-      el.textContent = text || "";
-      el.classList.toggle("empty", !text);
-    }
+    // Basic splash -> app animation
+    window.addEventListener("load", function () {
+      const splash = document.getElementById("splash-screen");
+      const appShell = document.getElementById("app-shell");
+      setTimeout(function () {
+        if (splash) splash.style.display = "none";
+        if (appShell) appShell.style.opacity = "1";
+      }, 1100);
+    });
 
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-      if (!toast) return;
-      toast.textContent = message;
-      toast.classList.add("show");
-      clearTimeout(toast._hideTimer);
-      toast._hideTimer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 1900);
-    }
+    // Global risk state object (local only)
+    const riskState = {
+      mode: "NORMAL",
+      maxDailyLoss: 400,
+      maxTradeLoss: 150,
+      dayPL: 0
+    };
 
-    /* Advisor prompt builder */
-    const advOutput = document.getElementById("advPromptOutput");
+    function renderRiskState() {
+      const modeSpan = document.getElementById("riskModeChip");
+      const maxDaySpan = document.getElementById("riskMaxDayChip");
+      const maxTradeSpan = document.getElementById("riskMaxTradeChip");
+      const daySpan = document.getElementById("riskDayPLChip");
+      const dayChip = document.getElementById("riskDayChip");
 
-    document.getElementById("buildAdvPromptBtn").addEventListener("click", () => {
-      const riskMode = document.getElementById("advRiskMode").value;
-      const maxLoss = document.getElementById("advMaxLoss").value.trim();
-      const maxDayLoss = document.getElementById("advMaxDayLoss").value.trim();
-      const sessNotes = document.getElementById("advSessionNotes").value.trim();
-      const symbol = document.getElementById("advSymbol").value.trim();
-      const timeframe = document.getElementById("advTimeframe").value.trim();
-      const idea = document.getElementById("advIdea").value.trim();
-      const dte = document.getElementById("advDte").value.trim();
-      const contract = document.getElementById("advContractPrice").value.trim();
-      const rr = document.getElementById("advRR").value.trim();
+      if (modeSpan) modeSpan.textContent = riskState.mode;
+      if (maxDaySpan) maxDaySpan.textContent = "$" + riskState.maxDailyLoss.toFixed(0);
+      if (maxTradeSpan) maxTradeSpan.textContent = "$" + riskState.maxTradeLoss.toFixed(0);
 
-      if (!symbol || !idea) {
-        showToast("Fill Symbol and Idea before building the prompt.");
+      if (daySpan && dayChip) {
+        const sign = riskState.dayPL >= 0 ? "+" : "";
+        daySpan.textContent = sign + riskState.dayPL.toFixed(0);
+        dayChip.classList.toggle("negative", riskState.dayPL < 0);
       }
 
-      const lines = [];
-      lines.push("You are my ADVISOR agent for intraday options trading.");
-      lines.push("");
-      lines.push("===== SESSION & RISK CONTEXT =====");
-      lines.push("Risk mode: " + riskMode);
-      lines.push("Max loss per trade: " + (maxLoss || "(not specified)"));
-      lines.push("Max loss for day: " + (maxDayLoss || "(not specified)"));
-      lines.push("Session notes: " + (sessNotes || "(none)"));
-      lines.push("");
-      lines.push("===== TRADE IDEA =====");
-      lines.push("Symbol: " + (symbol || "(not specified)"));
-      lines.push("Timeframe focus: " + (timeframe || "(not specified)"));
-      lines.push("Highâ€‘level idea:");
-      lines.push(idea || "(none â€“ infer only from generic structure if needed)");
-      lines.push("");
-      lines.push("===== OPTIONS CONTEXT =====");
-      lines.push("Desired DTE window: " + (dte || "(not specified)"));
-      lines.push("Rough contract price: " + (contract || "(not specified)"));
-      lines.push("Target risk:reward: " + (rr || "(not specified)"));
-      lines.push("");
-      lines.push("===== OBJECTIVE =====");
-      lines.push("1. Summarize likely intraday scenarios for this symbol given the idea and risk mode.");
-      lines.push("2. Propose 1â€“3 trade plans with:");
-      lines.push("   - Clear entry criteria / zones.");
-      lines.push("   - Invalidations / stop levels.");
-      lines.push("   - Targets, partials and management logic.");
-      lines.push("3. Grade each plan (A/B/C) and explicitly call out when to SKIP the trade.");
-      lines.push("4. Assume strict compliance with the risk constraints above.");
+      // Tiny mode indicators on Advisor / Post‑Trade / Bots / Logs
+      document.querySelectorAll("[data-mode-badge]").forEach(function (el) {
+        el.textContent = "Mode: " + riskState.mode;
+      });
 
-      setOutput(advOutput, lines.join("\n"));
-    });
+      const advisorModeInline = document.getElementById("advisorModeInline");
+      if (advisorModeInline) advisorModeInline.textContent = riskState.mode;
+    }
 
-    document.getElementById("copyAdvPromptBtn").addEventListener("click", () => {
-      const text = advOutput.textContent;
-      if (!text) { showToast("Build the Advisor prompt first."); return; }
-      navigator.clipboard.writeText(text).then(() => showToast("Advisor prompt copied."));
-    });
+    function syncFormsToRiskState() {
+      const advMode = document.getElementById("advRiskModeSelect");
+      if (advMode) advMode.value = riskState.mode;
 
-    /* Postâ€‘trade prompt builder */
-    const ptOutput = document.getElementById("ptPromptOutput");
+      const advMaxDay = document.getElementById("advMaxDailyLossInput");
+      if (advMaxDay) advMaxDay.value = "-" + riskState.maxDailyLoss.toFixed(0) + " USD";
 
-    document.getElementById("buildPtPromptBtn").addEventListener("click", () => {
-      const symbol = document.getElementById("ptSymbol").value.trim();
-      const dir = document.getElementById("ptDirection").value;
-      const sizeStr = document.getElementById("ptSize").value.trim();
-      const entryStr = document.getElementById("ptEntry").value.trim();
-      const exitStr = document.getElementById("ptExit").value.trim();
-      let plStr = document.getElementById("ptPL").value.trim();
-      const setup = document.getElementById("ptSetup").value.trim();
-      const planFollow = document.getElementById("ptPlanFollow").value.trim();
-      const emotion = document.getElementById("ptEmotion").value.trim();
+      const profileMode = document.getElementById("profileRiskMode");
+      if (profileMode) profileMode.value = riskState.mode;
 
-      const size = parseFloat(sizeStr);
-      const entry = parseFloat(entryStr);
-      const exit = parseFloat(exitStr);
+      const profileMaxDay = document.getElementById("profileMaxDay");
+      if (profileMaxDay) profileMaxDay.value = riskState.maxDailyLoss;
 
-      if (!plStr && !isNaN(size) && !isNaN(entry) && !isNaN(exit)) {
-        const pnl = (exit - entry) * size * 100;
-        plStr = pnl.toFixed(2);
-        document.getElementById("ptPL").value = plStr;
+      const profileMaxTrade = document.getElementById("profileMaxTrade");
+      if (profileMaxTrade) profileMaxTrade.value = riskState.maxTradeLoss;
+    }
+
+    function applyProfile() {
+      const modeEl = document.getElementById("profileRiskMode");
+      if (modeEl && modeEl.value) {
+        riskState.mode = modeEl.value;
       }
 
-      const lines = [];
-      lines.push("You are my POSTâ€‘TRADE ANALYZER agent for options day trading.");
-      lines.push("");
-      lines.push("===== RAW TRADE DATA =====");
-      lines.push("Symbol: " + (symbol || "(not specified)"));
-      lines.push("Direction: " + dir);
-      lines.push("Size: " + (sizeStr || "(not specified)"));
-      lines.push("Entry: " + (entryStr || "(not specified)"));
-      lines.push("Exit: " + (exitStr || "(not specified)"));
-      lines.push("Realized P/L: " + (plStr || "(can be inferred from entry/exitÂ·size if needed)"));
-      lines.push("");
-      lines.push("Setup / playbook tag: " + (setup || "(not specified)"));
-      lines.push("");
-      lines.push("Did I follow my plan?");
-      lines.push(planFollow || "(no notes provided)");
-      lines.push("");
-      lines.push("Emotional notes:");
-      lines.push(emotion || "(no emotional notes provided)");
-      lines.push("");
-      lines.push("===== OBJECTIVE =====");
-      lines.push("1. Give this trade a letter grade (A/B/C) for idea, execution and risk management.");
-      lines.push("2. List what I did well and what I did poorly (be concrete).");
-      lines.push("3. Call out any recurring patterns you suspect (good or bad).");
-      lines.push("4. Suggest 2â€“3 rule or behavior tweaks for future similar trades.");
-      lines.push("5. End with 3 bulletâ€‘point reminders I should read before trading tomorrow.");
+      const maxDayEl = document.getElementById("profileMaxDay");
+      const maxTradeEl = document.getElementById("profileMaxTrade");
 
-      setOutput(ptOutput, lines.join("\n"));
-    });
+      const maxDay = maxDayEl ? parseFloat(maxDayEl.value) : NaN;
+      const maxTrade = maxTradeEl ? parseFloat(maxTradeEl.value) : NaN;
 
-    document.getElementById("copyPtPromptBtn").addEventListener("click", () => {
-      const text = ptOutput.textContent;
-      if (!text) { showToast("Build the Postâ€‘Trade prompt first."); return; }
-      navigator.clipboard.writeText(text).then(() => showToast("Postâ€‘Trade prompt copied."));
-    });
+      if (!isNaN(maxDay)) riskState.maxDailyLoss = Math.max(0, maxDay);
+      if (!isNaN(maxTrade)) riskState.maxTradeLoss = Math.max(0, maxTrade);
 
-    /* Playbook snippet builder */
-    const pbOutput = document.getElementById("pbSnippetOutput");
+      renderRiskState();
+      syncFormsToRiskState();
+      alert("Risk profile applied to header, Advisor, Bots & Logs.");
+    }
 
-    document.getElementById("buildPbSnippetBtn").addEventListener("click", () => {
-      const name = document.getElementById("pbName").value.trim();
-      const cond = document.getElementById("pbConditions").value.trim();
-      const entry = document.getElementById("pbEntry").value.trim();
-      const stop = document.getElementById("pbStop").value.trim();
-      const targets = document.getElementById("pbTargets").value.trim();
-      const warn = document.getElementById("pbWarnings").value.trim();
+    const applyProfileBtn = document.getElementById("applyProfileBtn");
+    if (applyProfileBtn) {
+      applyProfileBtn.addEventListener("click", applyProfile);
+    }
 
-      const lines = [];
-      lines.push("PLAYBOOK ENTRY");
-      lines.push("Name: " + (name || "(unnamed setup)"));
-      lines.push("");
-      lines.push("Market conditions required:");
-      lines.push(cond || "(not specified)");
-      lines.push("");
-      lines.push("Entry logic:");
-      lines.push(entry || "(not specified)");
-      lines.push("");
-      lines.push("Stop logic:");
-      lines.push(stop || "(not specified)");
-      lines.push("");
-      lines.push("Targets:");
-      lines.push(targets || "(not specified)");
-      lines.push("");
-      lines.push("Common mistakes / warnings:");
-      lines.push(warn || "(not specified)");
-
-      setOutput(pbOutput, lines.join("\n"));
-    });
-
-    document.getElementById("copyPbSnippetBtn").addEventListener("click", () => {
-      const text = pbOutput.textContent;
-      if (!text) { showToast("Build the playbook snippet first."); return; }
-      navigator.clipboard.writeText(text).then(() => showToast("Playbook snippet copied."));
-    });
-
-    /* Trade history + day P/L */
-    let dayPL = 0;
-
+    // Trade history helpers
     function formatMoney(v) {
       const sign = v >= 0 ? "+" : "";
       return sign + v.toFixed(0);
     }
 
-    function updateDayPLDisplay() {
-      const span = document.getElementById("dayPLDisplay");
-      span.textContent = "$" + formatMoney(dayPL);
-    }
-
     function addTrade() {
-      const symbol = document.getElementById("thSymbol").value.trim();
-      const dir = document.getElementById("thDirection").value;
-      const size = parseFloat(document.getElementById("thSize").value);
-      const entry = parseFloat(document.getElementById("thEntry").value);
-      const exit = parseFloat(document.getElementById("thExit").value);
-      const notes = document.getElementById("thNotes").value.trim();
+      const symbolEl = document.getElementById("thSymbol");
+      const dirEl = document.getElementById("thDirection");
+      const sizeEl = document.getElementById("thSize");
+      const entryEl = document.getElementById("thEntry");
+      const exitEl = document.getElementById("thExit");
+      const notesEl = document.getElementById("thNotes");
+
+      const symbol = symbolEl.value.trim();
+      const dir = dirEl.value;
+      const size = parseFloat(sizeEl.value);
+      const entry = parseFloat(entryEl.value);
+      const exit = parseFloat(exitEl.value);
+      const notes = notesEl.value.trim();
 
       if (!symbol || isNaN(size) || isNaN(entry) || isNaN(exit)) {
-        showToast("Fill symbol, size, entry and exit.");
+        alert("Please fill symbol, size, entry and exit.");
         return;
       }
 
       const pnl = (exit - entry) * size * 100;
-      dayPL += pnl;
+      riskState.dayPL += pnl;
 
       const tbody = document.getElementById("tradeTableBody");
-      const row = tbody.insertRow(0);
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      if (tbody) {
+        const row = tbody.insertRow(0);
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
 
-      row.insertCell().textContent = timeStr;
-      row.insertCell().textContent = symbol;
-      row.insertCell().textContent = dir;
-      row.insertCell().textContent = size;
-      row.insertCell().textContent = entry.toFixed(2);
-      row.insertCell().textContent = exit.toFixed(2);
-      row.insertCell().textContent = formatMoney(pnl);
-      row.insertCell().textContent = notes;
+        row.insertCell().textContent = timeStr;
+        row.insertCell().textContent = symbol;
+        row.insertCell().textContent = dir;
+        row.insertCell().textContent = size;
+        row.insertCell().textContent = entry.toFixed(2);
+        row.insertCell().textContent = exit.toFixed(2);
+        row.insertCell().textContent = formatMoney(pnl);
+        row.insertCell().textContent = notes;
+      }
 
-      updateDayPLDisplay();
+      renderRiskState();
 
-      document.getElementById("thSymbol").value = "";
-      document.getElementById("thSize").value = "";
-      document.getElementById("thEntry").value = "";
-      document.getElementById("thExit").value = "";
-      document.getElementById("thNotes").value = "";
-
-      showToast("Trade added to session history.");
+      symbolEl.value = "";
+      sizeEl.value = "";
+      entryEl.value = "";
+      exitEl.value = "";
+      notesEl.value = "";
     }
 
     function clearTrades() {
       if (!confirm("Clear trade history for this session?")) return;
       const tbody = document.getElementById("tradeTableBody");
-      tbody.innerHTML = "";
-      dayPL = 0;
-      updateDayPLDisplay();
-      showToast("Session history cleared.");
+      if (tbody) tbody.innerHTML = "";
+      riskState.dayPL = 0;
+      renderRiskState();
     }
 
     window.addTrade = addTrade;
     window.clearTrades = clearTrades;
 
-    /* Risk presets + settings */
-    function applyPreset(mode) {
-      const riskModeInput = document.getElementById("riskModeInput");
-      const maxDayInput = document.getElementById("riskMaxDayInput");
-      const maxTradeInput = document.getElementById("riskMaxTradeInput");
+    // ----- Advisor: offline preview only -----
+    const advisorOutputBox = document.getElementById("advisorOutputBox");
 
-      if (!riskModeInput || !maxDayInput || !maxTradeInput) return;
+    function setAdvisorOutput(content, { isError = false, isLoading = false } = {}) {
+      if (!advisorOutputBox) return;
+      advisorOutputBox.classList.remove("error", "loading");
 
-      if (mode === "CONSERVATIVE") {
-        riskModeInput.value = "CONSERVATIVE";
-        maxDayInput.value = 200;
-        maxTradeInput.value = 75;
-      } else if (mode === "NORMAL") {
-        riskModeInput.value = "NORMAL";
-        maxDayInput.value = 400;
-        maxTradeInput.value = 150;
-      } else if (mode === "AGGRESSIVE") {
-        riskModeInput.value = "AGGRESSIVE";
-        maxDayInput.value = 600;
-        maxTradeInput.value = 250;
+      if (isLoading) {
+        advisorOutputBox.classList.add("loading");
+        advisorOutputBox.textContent = "Building local Advisor preview...";
+        return;
       }
-      applyRiskSettings(true);
-      const label = mode.charAt(0) + mode.slice(1).toLowerCase();
-      showToast(label + " preset applied.");
-    }
 
-    function applyRiskSettings(fromPreset) {
-      const mode = document.getElementById("riskModeInput").value;
-      const maxDay = document.getElementById("riskMaxDayInput").value;
-      const maxTrade = document.getElementById("riskMaxTradeInput").value;
+      if (isError) {
+        advisorOutputBox.classList.add("error");
+      }
 
-      if (mode) document.getElementById("riskModeDisplay").textContent = mode;
-      if (maxDay) document.getElementById("maxDayLossDisplay").textContent = "$" + maxDay;
-      if (maxTrade) document.getElementById("maxTradeLossDisplay").textContent = "$" + maxTrade;
-
-      // Sync Advisor panel defaults
-      const advMode = document.getElementById("advRiskMode");
-      const advMaxLoss = document.getElementById("advMaxLoss");
-      const advMaxDayLoss = document.getElementById("advMaxDayLoss");
-      if (advMode) advMode.value = mode;
-      if (advMaxLoss && maxTrade) advMaxLoss.value = "-" + maxTrade;
-      if (advMaxDayLoss && maxDay) advMaxDayLoss.value = "-" + maxDay;
-
-      if (!fromPreset) {
-        showToast("Risk settings applied.");
+      if (typeof content === "string") {
+        advisorOutputBox.textContent = content;
+      } else if (content) {
+        advisorOutputBox.textContent = JSON.stringify(content, null, 2);
+      } else {
+        advisorOutputBox.textContent = "";
       }
     }
 
-    window.applyRiskSettings = applyRiskSettings;
-    window.applyPreset = applyPreset;
+    function buildAdvisorPayload() {
+      const symbolEl = document.getElementById("advSymbol");
+      const styleEl = document.getElementById("advStyle");
+      const riskModeEl = document.getElementById("advRiskModeSelect");
+      const mentalEl = document.getElementById("advMental");
+      const setupFilterEl = document.getElementById("advSetupFilter");
+      const ideaEl = document.getElementById("advIdea");
 
-    // Init P/L text
-    updateDayPLDisplay();
+      const symbol = (symbolEl && symbolEl.value ? symbolEl.value : "").trim().toUpperCase();
+      const style = styleEl && styleEl.value ? styleEl.value : "SCALP_OPTIONS";
+      const risk_mode = riskModeEl && riskModeEl.value ? riskModeEl.value : (riskState.mode || "NORMAL");
+      const mental_state = mentalEl && mentalEl.value ? mentalEl.value : "DIALED_IN";
+      const setup_filter = setupFilterEl && setupFilterEl.value ? setupFilterEl.value : "A & B setups only";
+      const idea = (ideaEl && ideaEl.value ? ideaEl.value : "").trim();
+
+      const session = {
+        account_size: 50000,
+        max_daily_loss_pct: 0.03,
+        max_trade_risk_pct: 0.01,
+        max_open_positions: 2
+      };
+
+      const bot_weights = {
+        DATA: "more",
+        PATTERN: "more",
+        NEWS: "more",
+        SENTIMENT: "more",
+        RISK: "more"
+      };
+
+      return {
+        status: "preview",
+        route_type: "local_preview",
+        workspace: "EdgeDesk",
+        symbol,
+        trading_mode: "OPTIONS_SCALPER",
+        style,
+        risk_mode,
+        mental_state,
+        setup_filter,
+        session,
+        idea,
+        bot_weights,
+        disclaimer: "Offline demo shell. No live market data, broker connection, execution, or financial advice.",
+        suggested_plan: {
+          preparation: "Confirm setup quality, risk mode, and playbook fit before action.",
+          zones: ["watch zone", "confirmation zone", "invalidated zone"],
+          management: "Keep sizing inside the local risk profile and review after the action."
+        }
+      };
+    }
+
+    function runAdvisor() {
+      const symbolInput = document.getElementById("advSymbol");
+      const symbol = symbolInput ? symbolInput.value.trim() : "";
+      if (!symbol) {
+        alert("Please enter a symbol before running the Advisor preview.");
+        return;
+      }
+
+      setAdvisorOutput(null, { isLoading: true });
+      window.setTimeout(function () {
+        setAdvisorOutput(buildAdvisorPayload());
+      }, 240);
+    }
+
+    const runAdvisorBtn = document.getElementById("runAdvisorStub");
+    if (runAdvisorBtn) {
+      runAdvisorBtn.addEventListener("click", runAdvisor);
+    }
+
+    // Bots state (local only)
+    const botsState = {
+      panic: false,
+      bots: [
+        {
+          id: "NVDA_VWAP_MOMENTUM",
+          symbol: "NVDA",
+          strategy: "VWAP_MOMENTUM_TREND",
+          mode: "HYBRID",
+          status: "SCANNING",
+          plToday: 120
+        },
+        {
+          id: "SPY_BREAKOUT",
+          symbol: "SPY",
+          strategy: "BREAKOUT_CONTINUATION",
+          mode: "SIGNAL_ONLY",
+          status: "IDLE",
+          plToday: 0
+        },
+        {
+          id: "TSLA_TREND_PULLBACK",
+          symbol: "TSLA",
+          strategy: "TREND_PULLBACK",
+          mode: "AUTO",
+          status: "EXECUTING",
+          plToday: -85
+        }
+      ]
+    };
+
+    function renderBotsTable() {
+      const tbody = document.getElementById("botsTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      botsState.bots.forEach(bot => {
+        const tr = document.createElement("tr");
+
+        const idTd = document.createElement("td");
+        idTd.textContent = bot.id;
+        tr.appendChild(idTd);
+
+        const symTd = document.createElement("td");
+        symTd.textContent = bot.symbol;
+        tr.appendChild(symTd);
+
+        const stratTd = document.createElement("td");
+        stratTd.textContent = bot.strategy;
+        tr.appendChild(stratTd);
+
+        const modeTd = document.createElement("td");
+        const select = document.createElement("select");
+        ["OFF", "SIGNAL_ONLY", "HYBRID", "AUTO"].forEach(m => {
+          const opt = document.createElement("option");
+          opt.value = m;
+          opt.textContent = m;
+          select.appendChild(opt);
+        });
+        select.value = bot.mode;
+        select.addEventListener("change", () => {
+          bot.mode = select.value;
+          // Offline demo only; production integrations require approved controls
+        });
+        modeTd.appendChild(select);
+        tr.appendChild(modeTd);
+
+        const statusTd = document.createElement("td");
+        statusTd.textContent = bot.status;
+        tr.appendChild(statusTd);
+
+        const plTd = document.createElement("td");
+        plTd.textContent = formatMoney(bot.plToday);
+        plTd.style.color = bot.plToday >= 0 ? "#32d47a" : "#ff5c7a";
+        tr.appendChild(plTd);
+
+        tbody.appendChild(tr);
+      });
+
+      const panicBtn = document.getElementById("panicButton");
+      if (panicBtn) {
+        panicBtn.textContent = botsState.panic
+          ? "Panic ACTIVE – click to clear (local)"
+          : "⛔ Panic: flatten & stop bots (local)";
+      }
+    }
+
+    const panicButton = document.getElementById("panicButton");
+    if (panicButton) {
+      panicButton.addEventListener("click", () => {
+        botsState.panic = !botsState.panic;
+        // Offline demo only; production panic controls require approved integrations
+        renderBotsTable();
+        alert(botsState.panic ? "Panic ON (local only)." : "Panic cleared (local only).");
+      });
+    }
+
+    const allSignalBtn = document.getElementById("allSignalOnlyButton");
+    if (allSignalBtn) {
+      allSignalBtn.addEventListener("click", () => {
+        botsState.bots.forEach(b => { b.mode = "SIGNAL_ONLY"; });
+        renderBotsTable();
+        // TODO: sync modes to backend
+      });
+    }
+
+    // Logs state (local only)
+    const logsState = {
+      entries: [
+        {
+          timestamp: new Date().toISOString(),
+          level: "INFO",
+          source: "SYSTEM",
+          symbol: null,
+          message: "EdgeDesk v2 started in NORMAL mode."
+        },
+        {
+          timestamp: new Date().toISOString(),
+          level: "INFO",
+          source: "RISK",
+          symbol: null,
+          message: "0DTE rule ENFORCED, skip first 1m after open in AUTO/HYBRID."
+        }
+      ]
+    };
+
+    function renderLogsTable() {
+      const tbody = document.getElementById("logsTableBody");
+      if (!tbody) return;
+
+      const symFilterEl = document.getElementById("logsSymbolFilter");
+      const levelFilterEl = document.getElementById("logsLevelFilter");
+      const symFilter = symFilterEl ? symFilterEl.value.trim().toUpperCase() : "";
+      const levelFilter = levelFilterEl ? levelFilterEl.value : "";
+
+      tbody.innerHTML = "";
+
+      logsState.entries
+        .slice()
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .forEach(entry => {
+          if (symFilter && (!entry.symbol || entry.symbol.toUpperCase() !== symFilter)) return;
+          if (levelFilter && entry.level !== levelFilter) return;
+
+          const tr = document.createElement("tr");
+          const timeTd = document.createElement("td");
+          const ts = new Date(entry.timestamp);
+          timeTd.textContent = ts.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"});
+          tr.appendChild(timeTd);
+
+          const lvlTd = document.createElement("td");
+          lvlTd.textContent = entry.level;
+          if (entry.level === "ERROR") lvlTd.style.color = "#ff5c7a";
+          else if (entry.level === "WARN") lvlTd.style.color = "#ffb347";
+          tr.appendChild(lvlTd);
+
+          const srcTd = document.createElement("td");
+          srcTd.textContent = entry.source;
+          tr.appendChild(srcTd);
+
+          const symTd = document.createElement("td");
+          symTd.textContent = entry.symbol || "-";
+          tr.appendChild(symTd);
+
+          const msgTd = document.createElement("td");
+          msgTd.textContent = entry.message;
+          tr.appendChild(msgTd);
+
+          tbody.appendChild(tr);
+        });
+    }
+
+    const addFakeLogBtn = document.getElementById("addFakeLog");
+    if (addFakeLogBtn) {
+      addFakeLogBtn.addEventListener("click", () => {
+        logsState.entries.push({
+          timestamp: new Date().toISOString(),
+          level: "INFO",
+          source: "DEV",
+          symbol: "TSLA",
+          message: "Fake log event – replace with real API feed."
+        });
+        renderLogsTable();
+      });
+    }
+
+    const clearLogsBtn = document.getElementById("clearLogs");
+    if (clearLogsBtn) {
+      clearLogsBtn.addEventListener("click", () => {
+        if (!confirm("Clear all logs (local only)?")) return;
+        logsState.entries = [];
+        renderLogsTable();
+      });
+    }
+
+    const logsSymbolFilter = document.getElementById("logsSymbolFilter");
+    const logsLevelFilter = document.getElementById("logsLevelFilter");
+    if (logsSymbolFilter) logsSymbolFilter.addEventListener("input", renderLogsTable);
+    if (logsLevelFilter) logsLevelFilter.addEventListener("change", renderLogsTable);
+
+    // Simple screen navigation
+    (function () {
+      const navButtons = document.querySelectorAll(".nav button");
+      const leftScreens = document.querySelectorAll("main > section:first-child .screen");
+      const rightScreens = document.querySelectorAll("main > section:nth-child(2) .screen");
+
+      function showScreen(name) {
+        leftScreens.forEach(function (s) {
+          s.classList.toggle("active", s.getAttribute("data-screen") === name);
+        });
+        rightScreens.forEach(function (s) {
+          s.classList.toggle("active", s.getAttribute("data-screen") === name);
+        });
+        navButtons.forEach(function (btn) {
+          btn.classList.toggle("active", btn.getAttribute("data-screen-target") === name);
+        });
+      }
+
+      navButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const target = btn.getAttribute("data-screen-target");
+          showScreen(target);
+        });
+      });
+
+      document.querySelectorAll("[data-screen-jump]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          const target = el.getAttribute("data-screen-jump");
+          showScreen(target);
+        });
+      });
+
+      // Expose if you want to jump screens from the console
+      window.edgeDeskShowScreen = showScreen;
+    })();
+
+    // Initial render
+    renderRiskState();
+    syncFormsToRiskState();
+    renderBotsTable();
+    renderLogsTable();
   </script>
 </body>
 </html>
-
-
