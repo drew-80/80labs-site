@@ -2,10 +2,227 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=/start/" />
-  <title>Redirecting…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CloudBeasts x lanOS | 80 Labs</title>
+  <meta name="description" content="CloudBeasts x lanOS turns existing devices into a coordinated, local-first system. Your network becomes a system that performs." />
+  <meta property="og:title" content="CloudBeasts x lanOS | 80 Labs" />
+  <meta property="og:description" content="Your network becomes a system that performs." />
+  <meta property="og:image" content="assets/cloudbeasts/stormtech-rare.png" />
+  <meta name="theme-color" content="#10231f" />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <p>If you are not redirected, <a href="/start/">click here</a>.</p>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="#top" class="brand" aria-label="80 Labs home">
+        <span class="brand-mark">80</span>
+        <span>80 Labs</span>
+      </a>
+      <div class="nav-links">
+        <a href="#demo">Demo</a>
+        <a href="#edgedesk">EdgeDesk</a>
+        <a href="#enterprise">Enterprise</a>
+        <a href="#residential">Residential</a>
+        <a class="button" href="#demo-request">Book demo</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-media" src="assets/cloudbeasts/stormtech-rare.png" alt="CloudBeasts showcase artifact for a coordinated-device preview" />
+      <div class="hero-inner">
+        <div class="hero-copy-block">
+          <p class="eyebrow">CloudBeasts x lanOS</p>
+          <h1 id="hero-title">CloudBeasts x lanOS</h1>
+          <p class="hero-copy">Your network becomes a system that performs. It starts with the hardware users already own, shows visible performance through coordination, and can optionally expand with cloud compute for heavier workloads.</p>
+          <div class="hero-actions">
+            <a class="button" href="#demo-request">Book a live demo</a>
+            <a class="button secondary" href="edge/">Open EdgeDesk example</a>
+          </div>
+          <div class="hero-proof" aria-label="Product proof points">
+            <span><strong>lanOS coordinates</strong> Compatible devices and local state on the network.</span>
+            <span><strong>CloudBeasts triggers</strong> Useful actions across the coordinated system.</span>
+            <span><strong>EdgeDesk demonstrates</strong> One workspace pattern built on top.</span>
+          </div>
+        </div>
+        <div class="coordination-scene" aria-label="One host coordinating endpoint devices">
+          <div class="scene-board">
+            <span class="pulse-line line-a"></span>
+            <span class="pulse-line line-b"></span>
+            <span class="pulse-line line-c"></span>
+            <span class="pulse-line line-d"></span>
+            <div class="node host"><strong>Host</strong><span>lanOS online</span><span>route: local</span></div>
+            <div class="node endpoint-a"><strong>Workspace</strong><span>EdgeDesk</span><span>example</span></div>
+            <div class="node endpoint-b"><strong>Endpoint B</strong><span>node-02</span><span>ready</span></div>
+            <div class="node endpoint-c"><strong>Display</strong><span>node-03</span><span>ready</span></div>
+            <div class="node endpoint-d"><strong>Dashboard</strong><span>node-04</span><span>ready</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="demo">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Preview flow</p>
+            <h2>See how workspace, action layer, and local coordination fit together.</h2>
+          </div>
+          <p class="section-lede">This on-page flow is a visual preview. Book a live demo for the actual local run with locally hosted lanOS, CloudBeasts actions, and available job, node, route, and status evidence. The live proof should be simple: one device coordinated several other compatible endpoints.</p>
+        </div>
+        <div class="demo-panel panel">
+          <div class="demo-stage">
+            <div class="demo-control">
+              <span class="tag">Preview only</span>
+              <h3>CloudBeasts action trigger</h3>
+              <p class="section-lede">Trigger a simulated action and watch the job move through visible endpoint states. Cloud compute remains optional and labeled.</p>
+              <div class="hero-actions">
+                <button class="button" type="button" id="trigger-demo">Run preview action</button>
+                <button class="button secondary" type="button" id="toggle-cloud">Show optional cloud route</button>
+              </div>
+              <div class="endpoint-grid" id="endpoint-grid">
+                <div class="endpoint" data-node="node-01"><strong>EdgeDesk</strong><span>node-01 awaiting preview</span></div>
+                <div class="endpoint" data-node="node-02"><strong>CloudBeasts</strong><span>node-02 awaiting preview</span></div>
+                <div class="endpoint" data-node="node-03"><strong>Local display</strong><span>node-03 awaiting preview</span></div>
+                <div class="endpoint" data-node="node-04"><strong>Evidence log</strong><span>node-04 awaiting preview</span></div>
+              </div>
+            </div>
+            <div class="demo-log" aria-live="polite" id="demo-log">
+              <span class="log-line">preview_id: idle</span>
+              <span class="log-line">job_id: preview pending</span>
+              <span class="log-line">route_type: local preview</span>
+              <span class="log-line">node_id: preview pending</span>
+              <span class="log-line warn">cloud_compute: optional, not default</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="edgedesk">
+      <div class="section-inner split">
+        <div>
+          <p class="kicker">One example workspace</p>
+          <h2>EdgeDesk shows one real workflow shape.</h2>
+          <p class="section-lede">EdgeDesk is a focused workspace built to show how CloudBeasts x lanOS can support real user workflows. It is not the only use case.</p>
+          <p class="section-lede">In this example, the workspace organizes profile state, risk settings, playbook logic, prompt generation, and post-action review into one surface. The same pattern can support interactive displays, home dashboards, creator workflows, operations panels, field tools, and persistent personal environments.</p>
+          <div class="hero-actions">
+            <a class="button" href="edge/">Open EdgeDesk example</a>
+            <a class="button secondary" href="#demo-request">Book a live demo</a>
+          </div>
+        </div>
+        <div class="workspace-card panel">
+          <span class="tag">Offline demo shell</span>
+          <h3>Advisor / Post-Trade / Playbook / Profile-Risk</h3>
+          <p>EdgeDesk does not execute trades today. It shows how a focused interface could later connect to approved data sources, broker APIs, local tools, or CloudBeasts/lanOS workflows.</p>
+          <ul class="workspace-list">
+            <li>Advisor prompt-building and pre-action planning</li>
+            <li>Post-action review and analyzer prompts</li>
+            <li>Playbook entries and reusable workflow context</li>
+            <li>Profile and risk state that local tools can respect</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="enterprise">
+      <div class="section-inner split">
+        <div>
+          <p class="kicker">Enterprise</p>
+          <h2>See what your existing hardware could become.</h2>
+          <p class="section-lede">Turn every screen you already own into a coordinated environment without making new infrastructure the starting point. Use the estimator to frame a pilot around device footprint and deployment scope.</p>
+          <div class="asset-strip" aria-label="CloudBeasts artifact examples">
+            <figure class="asset-tile"><img src="assets/cloudbeasts/stormtech-rare.png" alt="Stormtech artifact" /><figcaption>Rendered artifact example</figcaption></figure>
+            <figure class="asset-tile"><img src="assets/cloudbeasts/astralforge-apex.png" alt="Astralforge artifact" /><figcaption>Advanced artifact example</figcaption></figure>
+            <figure class="asset-tile"><img src="assets/cloudbeasts/bioglyph-epic.png" alt="Bioglyph artifact" /><figcaption>Local-first action output</figcaption></figure>
+          </div>
+        </div>
+        <form class="calculator" id="roi-form">
+          <span class="tag">Enterprise ROI estimator</span>
+          <div class="form-grid">
+            <label>Number of screens<input id="screens" type="number" min="0" value="24" /></label>
+            <label>Other networked devices<input id="devices" type="number" min="0" value="18" /></label>
+            <label>Zones, floors, or locations<input id="zones" type="number" min="1" value="3" /></label>
+            <label>Network shape<select id="network"><option value="same">One LAN</option><option value="segmented">Segmented networks</option></select></label>
+            <label>Cloud policy<select id="cloud"><option value="no">Local-only or not yet</option><option value="yes">Cloud allowed where useful</option><option value="unsure">Not sure</option></select></label>
+            <label>Current pain point<select id="pain"><option>Manual updates</option><option>Fragmented displays</option><option>Event operations</option><option>Device reuse</option></select></label>
+          </div>
+          <button class="button full" type="submit">Calculate pilot frame</button>
+          <div class="result-box" id="roi-results" aria-live="polite"></div>
+          <p class="notice">This estimate depends on network conditions, compatible devices, configuration, and deployment scope. It is not a guarantee of coverage, savings, or performance.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="demo-request">
+      <div class="section-inner split">
+        <div>
+          <p class="kicker">Book a live demo</p>
+          <h2>Use the page for interest. Use the demo for proof.</h2>
+          <p class="section-lede">A live walkthrough can show the actual local run: EdgeDesk as the workspace surface, CloudBeasts as the action layer, lanOS coordination, and available <code>job_id</code>, <code>node_id</code>, <code>route_type</code>, status, and timestamp evidence.</p>
+        </div>
+        <form class="waitlist" id="demo-form" action="mailto:hello@80labs.to" method="post" enctype="text/plain">
+          <span class="tag">Demo request</span>
+          <div class="hp-field" aria-hidden="true"><label for="demo_company_website">Company website</label><input id="demo_company_website" name="company_website" type="text" tabindex="-1" autocomplete="off" /></div>
+          <div class="form-grid">
+            <label>Name<input id="demo-name" name="name" required placeholder="Avery Stone" /></label>
+            <label>Email<input id="demo-email" name="email" type="email" required placeholder="you@company.com" /></label>
+            <label>Company<input id="demo-company" name="company" placeholder="Company" /></label>
+            <label>Role<input id="demo-role" name="role" placeholder="IT, facilities, AV, founder" /></label>
+            <label>Screens/devices<input id="demo-devices" name="screens_devices" placeholder="40 screens, 20 devices" /></label>
+            <label>Zones/locations<input id="demo-zones" name="zones_locations" placeholder="3 floors, 2 buildings" /></label>
+            <label>Network shape<select id="demo-network" name="network_shape"><option>One LAN</option><option>Segmented networks</option><option>Not sure</option></select></label>
+            <label>Cloud policy<select id="demo-cloud" name="cloud_policy"><option>Local-only</option><option>Cloud allowed</option><option>Not sure</option></select></label>
+          </div>
+          <label>What would make the demo successful?<textarea id="demo-success" name="demo_success" placeholder="Tell us what you want to see."></textarea></label>
+          <button class="button full" type="submit">Prepare demo request</button>
+          <p class="notice">Simple email fallback for now. A dedicated static form endpoint can replace this when selected.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section alt" id="residential">
+      <div class="section-inner split">
+        <div>
+          <p class="kicker">Residential</p>
+          <h2>The devices you already own, finally working together.</h2>
+          <p class="section-lede">Join the early list for CloudBeasts x lanOS, a local-first way to connect and use the devices already on your network. Your devices can do more when they work together. Performance depends on your network, but the system adapts.</p>
+          <div class="tiers">
+            <div class="tier"><strong>3 invites</strong><span>Early access priority</span></div>
+            <div class="tier"><strong>10 invites</strong><span>Priority onboarding</span></div>
+            <div class="tier"><strong>25 invites</strong><span>Power user / Apex consideration</span></div>
+          </div>
+        </div>
+        <form class="waitlist" id="waitlist" action="mailto:hello@80labs.to" method="post" enctype="text/plain">
+          <span class="tag">Waitlist</span>
+          <div class="hp-field" aria-hidden="true"><label for="company_website">Company website</label><input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off" /></div>
+          <input type="hidden" id="referral-source" name="referral_source" />
+          <input type="hidden" id="utm-source" name="utm_source" />
+          <input type="hidden" id="utm-medium" name="utm_medium" />
+          <input type="hidden" id="utm-campaign" name="utm_campaign" />
+          <div class="form-grid">
+            <label>First name<input id="first-name" name="first_name" required placeholder="Avery" /></label>
+            <label>Email<input id="email" name="email" type="email" required placeholder="you@example.com" /></label>
+            <label>Estimated devices at home<input id="home-devices" name="estimated_home_devices" type="number" min="1" value="8" /></label>
+            <label>Primary interest<select id="interest" name="primary_interest"><option>I want my home devices to work together.</option><option>I have old devices I want to reuse.</option><option>I want local-first tools.</option><option>I want dashboards or displays.</option><option>I am a developer or builder.</option><option>I want early access to advanced features.</option></select></label>
+          </div>
+          <button class="button full" type="submit">Join the waitlist</button>
+          <p class="notice">Move up the waitlist by inviting people who want more from the devices they already own.</p>
+          <div class="waitlist-output" id="waitlist-output" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 80 Labs. CloudBeasts x lanOS showcase.</span>
+      <span>Local-first coordination that scales with available compatible devices. Optional cloud expansion where supported.</span>
+    </div>
+  </footer>
+
+  <script src="site.js"></script>
 </body>
 </html>
