@@ -132,7 +132,7 @@
       gap: 0.8rem;
       margin-bottom: 1.1rem;
     }
-    .advisor-json-output {
+    .advisor-output {
       margin-top: 0.5rem;
       padding: 0.6rem 0.7rem;
       border-radius: 0.5rem;
@@ -144,11 +144,11 @@
       overflow: auto;
       white-space: pre-wrap;
     }
-    .advisor-json-output.error {
+    .advisor-output.error {
       border-color: var(--danger);
       color: var(--danger);
     }
-    .advisor-json-output.loading {
+    .advisor-output.loading {
       opacity: 0.7;
     }   
 
@@ -629,7 +629,7 @@
     <div class="splash-logo"><span>E</span></div>
     <div class="splash-title">EdgeDesk v2</div>
     <div class="splash-subtitle">
-      Opening an offline example workspace for Advisor, Risk, Bots, and Analyzer.
+      Opening an offline example workspace for Advisor, Risk, Controls, and Review.
     </div>
     <div class="splash-loader"><span></span></div>
   </div>
@@ -648,7 +648,7 @@
         <div class="risk-summary">
           <div class="risk-chip">
             <span class="label">Mode</span>
-            <span class="value" id="riskModeChip">NORMAL</span>
+            <span class="value" id="riskModeChip">Normal</span>
           </div>
           <div class="risk-chip">
             <span class="label">Max day</span>
@@ -664,7 +664,7 @@
           </div>
           <div class="risk-chip">
             <span class="label">Demo</span>
-            <span class="value">Offline demo · no live execution</span>
+            <span class="value">Offline demo - no live execution</span>
           </div>
         </div>
         <nav class="nav">
@@ -675,16 +675,16 @@
             <span class="dot"></span> Advisor
           </button>
           <button data-screen-target="analyzer">
-            <span class="dot"></span> Post‑Trade
+            <span class="dot"></span> Post-Trade
           </button>
           <button data-screen-target="playbook">
             <span class="dot"></span> Playbook
           </button>
           <button data-screen-target="bots">
-            <span class="dot"></span> Bots
+            <span class="dot"></span> Controls
           </button>
           <button data-screen-target="logs">
-            <span class="dot"></span> Logs
+            <span class="dot"></span> Timeline
           </button>
         </nav>
       </div>
@@ -698,52 +698,51 @@
           <div class="home-header">
             <div class="home-title">What do you want to do right now?</div>
             <div class="home-subtitle">
-              Plan with the Advisor, review with the Analyzer, study the Playbook, or manage your bots.
+              Plan with Advisor, review the session, study the Playbook, or adjust controls.
             </div>
           </div>
           <div class="home-grid">
             <div class="home-tile" data-screen-jump="advisor">
-              <div class="home-tile-icon">🧭</div>
-              <div class="home-tile-title">Plan a trade (Advisor)</div>
+              <div class="home-tile-icon">Plan</div>
+              <div class="home-tile-title">Plan with Advisor</div>
               <div class="home-tile-text">
-                Define risk, symbol, and idea. Get structured zones, grades, and management logic.
+                Set the context, risk posture, and idea. Advisor turns it into a readable plan.
               </div>
               <button class="tile-cta" type="button" data-screen-jump="advisor">Go to Advisor</button>
             </div>
             <div class="home-tile" data-screen-jump="analyzer">
-              <div class="home-tile-icon">📊</div>
-              <div class="home-tile-title">Review a trade (Post‑Trade)</div>
+              <div class="home-tile-icon">Review</div>
+              <div class="home-tile-title">Review the session</div>
               <div class="home-tile-text">
-                Log entry/exit, size, and context. See session P&L update in the header.
+                Capture outcomes and notes so the session stays easy to review.
               </div>
-              <button class="tile-cta" type="button" data-screen-jump="analyzer">Go to Post‑Trade</button>
+              <button class="tile-cta" type="button" data-screen-jump="analyzer">Go to Post-Trade</button>
             </div>
             <div class="home-tile" data-screen-jump="playbook">
-              <div class="home-tile-icon">📚</div>
-              <div class="home-tile-title">Study playbook & setups</div>
+              <div class="home-tile-icon">Study</div>
+              <div class="home-tile-title">Study the playbook</div>
               <div class="home-tile-text">
-                Browse your strategies and patterns – the core of your edge – in a structured way.
+                Browse strategies and patterns in a calm, organized workspace.
               </div>
               <button class="tile-cta" type="button" data-screen-jump="playbook">Go to Playbook</button>
             </div>
             <div class="home-tile" data-screen-jump="bots">
-              <div class="home-tile-icon">🤖</div>
-              <div class="home-tile-title">Manage bots & autonomy</div>
+              <div class="home-tile-icon">Control</div>
+              <div class="home-tile-title">Manage controls</div>
               <div class="home-tile-text">
-                Per‑symbol autonomy (OFF / SIGNAL_ONLY / HYBRID / AUTO), plus a panic button and hard rules.
+                Set operating modes, pause activity, and keep guardrails visible.
               </div>
-              <button class="tile-cta" type="button" data-screen-jump="bots">Go to Bots</button>
+              <button class="tile-cta" type="button" data-screen-jump="bots">Go to Controls</button>
             </div>
           </div>
         </div>
 
         <!-- Advisor -->
         <div class="screen" data-screen="advisor">
-          <div class="section-title">Advisor · Pre‑Trade Planning</div>
-          <div class="mode-pill" data-mode-badge="advisor">Mode: NORMAL</div>
+          <div class="section-title">Advisor - Planning</div>
+          <div class="mode-pill" data-mode-badge="advisor">Mode: Normal</div>
           <p class="hint">
-            Tell the system how you want to trade <em>today</em> and for this idea: symbol, risk, style, and mental
-            state. The real Advisor agent will output a plan in the right‑hand pane.
+            Describe the idea, context, risk posture, and mental state. Advisor turns the inputs into a concise planning view.
           </p>
           <div class="field-row">
             <label>
@@ -753,10 +752,10 @@
             <label>
               Style
               <select id="advStyle">
-                <option>SCALP_OPTIONS</option>
-                <option>INTRADAY_SWING_OPTIONS</option>
-                <option>LOTTOS_ONLY</option>
-                <option>COMMON_STOCK_SCALP</option>
+                <option>Intraday plan</option>
+                <option>Short-session plan</option>
+                <option>High-conviction idea</option>
+                <option>Common stock plan</option>
               </select>
             </label>
           </div>
@@ -764,9 +763,9 @@
             <label>
               Risk mode
               <select id="advRiskModeSelect">
-                <option value="NORMAL">NORMAL</option>
-                <option value="CONSERVATIVE">CONSERVATIVE</option>
-                <option value="AGGRESSIVE">AGGRESSIVE</option>
+                <option value="Normal">Normal</option>
+                <option value="Conservative">Conservative</option>
+                <option value="Aggressive">Aggressive</option>
               </select>
             </label>
             <label>
@@ -778,39 +777,39 @@
             <label>
               Mental state
               <select id="advMental">
-                <option>DIALED_IN</option>
-                <option>OKAY</option>
-                <option>STRESSED</option>
-                <option>TIRED</option>
+                <option>Dialed in</option>
+                <option>Okay</option>
+                <option>Stressed</option>
+                <option>Tired</option>
               </select>
             </label>
             <label>
               Setup filter
               <select id="advSetupFilter">
-                <option>A &amp; B setups only</option>
-                <option>A+ only</option>
-                <option>A/B/C allowed</option>
+                <option>Approved setups only</option>
+                <option>Highest-confidence setups</option>
+                <option>All reviewed setups</option>
               </select>
             </label>
           </div>
           <label>
             Idea notes (optional)
-            <textarea id="advIdea" placeholder="Describe the setup in your language – trend pullback, breakout, reversal, etc."></textarea>
+            <textarea id="advIdea" placeholder="Describe the setup in plain language."></textarea>
           </label>
           <p class="hint">
-            In this offline demo, clicking <strong>Run Advisor</strong> builds a local preview response on the right: zones, contract templates, scaling rules, and a short narrative.
+            In this offline demo, clicking <strong>Run Advisor</strong> builds a short planning preview on the right.
           </p>
           <div class="btn-row">
             <button class="btn-primary" type="button" id="runAdvisorStub">Run Advisor</button>
           </div>
         </div>
 
-        <!-- Post‑Trade Analyzer -->
+        <!-- Post-Trade Analyzer -->
         <div class="screen" data-screen="analyzer">
-          <div class="section-title">Post‑Trade Analyzer · Session P&amp;L</div>
-          <div class="mode-pill" data-mode-badge="analyzer">Mode: NORMAL</div>
+          <div class="section-title">Session Review</div>
+          <div class="mode-pill" data-mode-badge="analyzer">Mode: Normal</div>
           <p class="hint">
-            Quick per‑trade log for the current session. Each row updates the green Day P&L chip in the header.
+            Log outcomes and notes for the current session. The summary updates as the session changes.
           </p>
 
           <div class="field-row">
@@ -842,12 +841,12 @@
           </div>
           <label>
             Notes
-            <input type="text" id="thNotes" placeholder="TSLA 430C lotto squeeze..." />
+                <input type="text" id="thNotes" placeholder="Clean pullback, strong exit, review note..." />
           </label>
 
           <div class="btn-row">
-            <button class="btn-primary" type="button" onclick="addTrade()">➕ Add trade</button>
-            <button class="btn-secondary" type="button" onclick="clearTrades()">🗑 Clear history</button>
+            <button class="btn-primary" type="button" onclick="addTrade()"> Add entry</button>
+            <button class="btn-secondary" type="button" onclick="clearTrades()"> Clear session</button>
           </div>
 
           <div class="table-wrapper">
@@ -871,42 +870,42 @@
 
         <!-- Playbook -->
         <div class="screen" data-screen="playbook">
-          <div class="section-title">Playbook &amp; Setups · Knowledge Base View</div>
+          <div class="section-title">Playbook - Strategy Library</div>
           <p class="hint">
-            This is the edge layer: structured strategies and patterns. The UI below is how you’d browse,
+            This is the edge layer: structured strategies and patterns. The UI below is how you'd browse,
             edit, and link setups to real trades.
           </p>
           <div class="pill-small">
-            <span>☑</span> Strategies + patterns only for now
+            <span>Selected</span> Strategies and patterns
           </div>
           <div class="playbook-grid">
             <div>
               <div class="list-header">Strategies (named playbook entries)</div>
               <div class="playbook-list" id="strategy-list">
                 <div class="playbook-item active" data-strategy="tsla_trend_pullback">
-                  <div class="playbook-item-title">TSLA Trend Pullback Scalp</div>
+                  <div class="playbook-item-title">TSLA Trend Pullback</div>
                   <div class="playbook-item-meta">
-                    Style: SCALP_OPTIONS · Pattern: Trend pullback to VWAP
+                    Style: Intraday - Pattern: Trend pullback
                   </div>
                 </div>
                 <div class="playbook-item" data-strategy="spy_open_drive">
                   <div class="playbook-item-title">SPY Open Drive Fade</div>
                   <div class="playbook-item-meta">
-                    Style: INTRADAY_SWING_OPTIONS · Pattern: Failed opening drive
+                    Style: Intraday - Pattern: Failed opening drive
                   </div>
                 </div>
                 <div class="playbook-item" data-strategy="nvda_breakout">
                   <div class="playbook-item-title">NVDA Breakout Continuation</div>
                   <div class="playbook-item-meta">
-                    Style: SCALP_OPTIONS · Pattern: Breakout from consolidation
+                    Style: Intraday - Pattern: Breakout from consolidation
                   </div>
                 </div>
               </div>
             </div>
             <div class="playbook-detail" id="strategy-detail">
-              <h3>TSLA Trend Pullback Scalp</h3>
-              <p><strong>Instrument:</strong> TSLA options (liquid, near‑ATM strikes)</p>
-              <p><strong>Style:</strong> SCALP_OPTIONS · intraday only, no holds through major news</p>
+              <h3>TSLA Trend Pullback</h3>
+              <p><strong>Instrument:</strong> Example option contract</p>
+              <p><strong>Style:</strong> Intraday planning only</p>
               <p><strong>Core pattern:</strong> Uptrend + controlled pullback to VWAP / prior breakout level</p>
               <p><strong>Preconditions:</strong></p>
               <ul class="playbook-bullets">
@@ -916,9 +915,9 @@
               </ul>
               <p><strong>Entry rules:</strong></p>
               <ul class="playbook-bullets">
-                <li>Wait for pullback into marked VWAP/support zone – no entries mid‑dump.</li>
+                <li>Wait for a clear pullback into the marked support zone.</li>
                 <li>Enter only on a clean bounce candle that holds higher lows.</li>
-                <li>Use near‑ATM calls (no far‑lotto strikes for this baseline strategy).</li>
+                <li>Use the contract profile defined for this strategy.</li>
               </ul>
               <p><strong>Exit / management:</strong></p>
               <ul class="playbook-bullets">
@@ -932,26 +931,26 @@
           </div>
         </div>
 
-        <!-- Bots & Autonomy -->
+        <!-- Controls -->
         <div class="screen" data-screen="bots">
-          <div class="section-title">Bots &amp; Autonomy · Single‑User Control Panel</div>
-          <div class="mode-pill" data-mode-badge="bots">Mode: NORMAL</div>
+          <div class="section-title">Controls - Operating Modes</div>
+          <div class="mode-pill" data-mode-badge="bots">Mode: Normal</div>
           <p class="hint">
-            This is where you control automation per symbol/strategy. Modes: OFF, SIGNAL_ONLY, HYBRID, and AUTO. In this public demo everything stays local.
+            Set how assertive the workspace should be for each strategy. In this public demo, controls only update the screen.
           </p>
 
           <div class="field-row">
             <label>
-              0DTE rule (AUTO/HYBRID)
+              Time-box rule
               <select id="bots0dteRule">
-                <option value="ENFORCED" selected>Close by 3:30pm, no new 0DTE after 3:20pm</option>
+                <option value="ENFORCED" selected>Wrap up before the session close</option>
                 <option value="DISABLED">Disabled (manual only)</option>
               </select>
             </label>
             <label>
-              Open rule (AUTO/HYBRID)
+              Opening rule
               <select id="botsOpenRule">
-                <option value="SKIP_FIRST_MINUTE" selected>Skip first 1 min after open</option>
+                <option value="SKIP_FIRST_MINUTE" selected>Let the open settle before acting</option>
                 <option value="NO_RESTRICTION">No restriction (manual risk)</option>
               </select>
             </label>
@@ -961,7 +960,7 @@
             <table>
               <thead>
                 <tr>
-                  <th>Bot</th>
+                  <th>Control</th>
                   <th>Symbol</th>
                   <th>Strategy</th>
                   <th>Mode</th>
@@ -974,21 +973,20 @@
           </div>
 
           <div class="btn-row">
-            <button class="btn-primary" type="button" id="panicButton">⛔ Panic: flatten &amp; stop bots</button>
-            <button class="btn-secondary" type="button" id="allSignalOnlyButton">Set all to SIGNAL_ONLY</button>
+            <button class="btn-primary" type="button" id="panicButton"> Pause all activity</button>
+            <button class="btn-secondary" type="button" id="allSignalOnlyButton">Set all to Observe</button>
           </div>
           <p class="hint">
-            For now this only updates local state. In production, mode changes and the panic button could connect to approved workflow, execution, or CloudBeasts/lanOS controls.
+            In this public demo, controls only update the screen.
           </p>
         </div>
 
-        <!-- Logs & Alerts -->
+        <!-- Timeline -->
         <div class="screen" data-screen="logs">
-          <div class="section-title">System Logs &amp; Alerts</div>
-          <div class="mode-pill" data-mode-badge="logs">Mode: NORMAL</div>
+          <div class="section-title">Timeline</div>
+          <div class="mode-pill" data-mode-badge="logs">Mode: Normal</div>
           <p class="hint">
-            View a timeline of what the desk is doing: intent approvals, veto reasons, IBKR errors, risk events, and
-            your own mode changes. This is crucial for trusting a fully autonomous scalper.
+            View a simple timeline of decisions, notes, risk changes, and review events.
           </p>
 
           <div class="field-row">
@@ -1013,7 +1011,7 @@
                 <tr>
                   <th>Time</th>
                   <th>Level</th>
-                  <th>Source</th>
+                  <th>Area</th>
                   <th>Symbol</th>
                   <th>Message</th>
                 </tr>
@@ -1023,11 +1021,11 @@
           </div>
 
           <div class="btn-row">
-            <button class="btn-secondary" type="button" id="addFakeLog">➕ Add fake log (dev)</button>
-            <button class="btn-secondary" type="button" id="clearLogs">🗑 Clear logs</button>
+            <button class="btn-secondary" type="button" id="addFakeLog"> Add sample event</button>
+            <button class="btn-secondary" type="button" id="clearLogs"> Clear timeline</button>
           </div>
           <p class="hint">
-            In production, approved data sources or workflow services could POST real events here, such as blocked intents, risk changes, or mode updates.
+            In a production deployment, approved sources could add events here for review.
           </p>
         </div>
       </section>
@@ -1038,33 +1036,32 @@
         <div class="screen active" data-screen="home">
           <div class="right-pane-title">Desk Overview</div>
           <p class="right-pane-text">
-            EdgeDesk v2 is a single‑user intraday options desk. The UI is split into:
+            EdgeDesk is an example decision workspace. The UI is split into:
           </p>
           <ul class="right-pane-list">
-            <li><strong>Advisor:</strong> pre‑trade planning and intraday management logic.</li>
-            <li><strong>Post‑Trade:</strong> trade report cards and day P&amp;L.</li>
-            <li><strong>Playbook:</strong> strategies and patterns – your encoded edge.</li>
-            <li><strong>Bots:</strong> automation modes per symbol/strategy + panic.</li>
-            <li><strong>Logs:</strong> everything the system does, for trust and debugging.</li>
+            <li><strong>Advisor:</strong> planning support and structured context.</li>
+            <li><strong>Session Review:</strong> outcomes, notes, and summary state.</li>
+            <li><strong>Playbook:</strong> strategies, patterns, and reusable notes.</li>
+            <li><strong>Controls:</strong> operating modes and visible guardrails.</li>
+            <li><strong>Timeline:</strong> key decisions and review events.</li>
           </ul>
           <p class="right-pane-text">
-            This file is still offline: it does not call live market data, broker APIs, or external workflow services. The Advisor button renders a local preview only.
+            This public demo is offline. It does not use live market data, connect to a broker, or execute trades.
           </p>
 
           <hr class="divider" />
 
           <div class="right-pane-title">Profile &amp; risk (local)</div>
           <p class="right-pane-text">
-            These settings feed the header bar and the tiny mode indicators on Advisor/Post‑Trade/Bots/Logs.
-            They act like a local Risk Engine – no backend required.
+            These settings keep the workspace consistent across Advisor, Session Review, Controls, and Timeline.
           </p>
           <div class="field-row">
             <label>
               Risk mode
               <select id="profileRiskMode">
-                <option value="CONSERVATIVE">Conservative</option>
-                <option value="NORMAL" selected>Normal</option>
-                <option value="AGGRESSIVE">Aggressive</option>
+                <option value="Conservative">Conservative</option>
+                <option value="Normal" selected>Normal</option>
+                <option value="Aggressive">Aggressive</option>
               </select>
             </label>
             <label>
@@ -1072,7 +1069,7 @@
               <input id="profileMaxDay" type="number" placeholder="400" />
             </label>
             <label>
-              Max per‑trade loss ($)
+              Max risk per action ($)
               <input id="profileMaxTrade" type="number" placeholder="150" />
             </label>
           </div>
@@ -1085,67 +1082,67 @@
         <div class="screen" data-screen="advisor">
           <div class="right-pane-title">Advisor Output</div>
           <p class="right-pane-text">
-            <strong>Session mode:</strong> <span id="advisorModeInline">NORMAL</span>.
+            <strong>Session mode:</strong> <span id="advisorModeInline">Normal</span>.
           </p>
           <p class="right-pane-text">
-            When you click <strong>Run Advisor</strong>, the UI:
+            When you click <strong>Run Advisor</strong>, EdgeDesk:
           </p>
           <ul class="right-pane-list">
-            <li>Collects your symbol, style, risk mode, mental state and idea.</li>
-            <li>Builds a local preview payload from the current workspace state.</li>
-            <li>Renders sample JSON locally without sending data to a broker or external service.</li>
+            <li>Reads the current context, risk mode, and idea.</li>
+            <li>Builds a concise planning preview.</li>
+            <li>Keeps the interaction inside this offline demo.</li>
           </ul>
           <p class="right-pane-text">
-            The local preview JSON appears here.
+            The planning preview appears here.
           </p>
-          <pre id="advisorOutputBox" class="advisor-json-output">{ "status": "idle", "details": "Run Advisor to build a local preview." }</pre>
+          <pre id="advisorOutputBox" class="advisor-output">Run Advisor to build a planning preview.</pre>
         </div>
         
         <!-- Analyzer right -->
         <div class="screen" data-screen="analyzer">
           <div class="right-pane-title">Example Trade Tile</div>
           <p class="right-pane-text">
-            As you log trades and your Analyzer agent runs, it can generate tiles like this and link them
+            As you log outcomes, the session review can generate tiles like this and link them
             back to specific playbook entries.
           </p>
           <div class="table-wrapper" style="max-height:none;">
             <div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.3rem;">
-                <div style="font-weight:600;font-size:0.82rem;">TSLA 430C Lotto – Canonical Win</div>
+                <div style="font-weight:600;font-size:0.82rem;">Example Setup - Clean Review</div>
                 <span style="border-radius:999px;padding:0.12rem 0.45rem;border:1px solid rgba(50,212,122,0.8);font-size:0.7rem;color:var(--success);">+590 realized</span>
               </div>
               <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:0.14rem;">
                 <span style="color:var(--text-muted);">Entry / Exit</span>
-                <span>1.05 → 4.00 · 2x</span>
+                <span>Entry to exit - reviewed</span>
               </div>
               <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:0.14rem;">
                 <span style="color:var(--text-muted);">Setup grade</span>
-                <span>B / B+ (lotto)</span>
+                <span>Strong setup</span>
               </div>
               <div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:0.3rem;">
                 <span style="color:var(--text-muted);">Execution grade</span>
                 <span>A (sold into strength)</span>
               </div>
               <p class="right-pane-text" style="margin-bottom:0.3rem;">
-                Entered early, sold into the squeeze toward 430, then avoided the rug pull.
-                This is stored as a <strong>positive canonical example</strong> in your Playbook.
+                Captured the planned move, exited into strength, and preserved the review note.
+                This is stored as a <strong>clean review example</strong> in your Playbook.
               </p>
               <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
-                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">LOTTOS</span>
-                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">GOOD_BEHAVIOR</span>
-                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">GIFT_ZONE_EXIT</span>
+                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">Clean exit</span>
+                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">Aligned plan</span>
+                <span style="font-size:0.7rem;padding:0.12rem 0.4rem;border-radius:999px;border:1px solid var(--border-subtle);background:#050713;color:var(--text-muted);">Review saved</span>
               </div>
             </div>
           </div>
           <p class="right-pane-text" style="margin-top:0.5rem;">
-            The Day P&L chip in the header updates as you log trades on the left. In a live version,
-            the Analyzer agent would also track streaks, mistakes, and playbook alignment.
+            The Day P&L chip in the header updates as you log entries on the left. The review view keeps outcomes,
+            patterns, and playbook alignment easy to scan.
           </p>
         </div>
 
         <!-- Playbook right -->
         <div class="screen" data-screen="playbook">
-          <div class="right-pane-title">Why the Playbook Matters for Automation</div>
+          <div class="right-pane-title">Why the Playbook Matters</div>
           <p class="right-pane-text">
             The Playbook is the first slice of your knowledge base. It captures:
           </p>
@@ -1155,42 +1152,40 @@
             <li><strong>Grade rules:</strong> what makes a setup A, B, or C for you.</li>
           </ul>
           <p class="right-pane-text">
-            Even though bots are configurable per symbol/strategy, the Advisor and scalper should still check:
-            “Does this idea even fit a defined playbook entry?”
+            Controls should always respect the playbook, the current risk profile, and the user's intent.
           </p>
         </div>
 
-        <!-- Bots right -->
+        <!-- Controls right -->
         <div class="screen" data-screen="bots">
-          <div class="right-pane-title">Bots &amp; Hard Rules</div>
+          <div class="right-pane-title">Controls and Guardrails</div>
           <p class="right-pane-text">
-            This panel explains how automation should behave once wired:
+            This panel shows how the workspace can keep guardrails visible:
           </p>
           <ul class="right-pane-list">
-            <li><strong>Modes:</strong> SIGNAL_ONLY (no orders), HYBRID (only A‑grade auto), AUTO (all eligible setups).</li>
-            <li><strong>Time rules:</strong> never trade the first minute after open; never hold 0DTE past 3:30pm in AUTO/HYBRID.</li>
-            <li><strong>Panic:</strong> cancels open orders, flattens positions, and forces all bots to SIGNAL_ONLY.</li>
+            <li><strong>Modes:</strong> Off, Observe, Assist, and Active.</li>
+            <li><strong>Time rules:</strong> avoid rushed actions near sensitive parts of the session.</li>
+            <li><strong>Pause:</strong> quickly stop activity and move every control into Observe mode.</li>
           </ul>
           <p class="right-pane-text">
-            In production, this could connect to approved workflows listening for mode changes and a dedicated safety control. The logic is simple; the discipline comes from respecting it.
+            The goal is simple: make the current operating posture clear at a glance.
           </p>
         </div>
 
-        <!-- Logs right -->
+        <!-- Timeline right -->
         <div class="screen" data-screen="logs">
-          <div class="right-pane-title">What Gets Logged</div>
+          <div class="right-pane-title">What Appears Here</div>
           <p class="right-pane-text">
-            When connected to approved workflows, each important event becomes a log entry:
+            The timeline keeps important review events easy to scan:
           </p>
           <ul class="right-pane-list">
-            <li>New signal/intent generated (symbol, grade, RR, news gate).</li>
-            <li>Intent <strong>approved</strong> or <strong>vetoed</strong> by risk (and why).</li>
-            <li>Order placement, partial fills, cancels, and auto‑exits.</li>
-            <li>Risk events: max daily loss reached, mode changes, panic triggered.</li>
+            <li>New planning preview created.</li>
+            <li>Idea approved, paused, or sent back for review.</li>
+            <li>Actions, pauses, review notes, and guardrail changes.</li>
+            <li>Risk updates, mode changes, and pause events.</li>
           </ul>
           <p class="right-pane-text">
-            This makes it possible to answer “Why didn’t the bot take that trade?” or “Why did it stop trading?” in
-            plain English.
+            This makes it easier to understand what changed, when it changed, and why.
           </p>
         </div>
       </section>
@@ -1214,7 +1209,7 @@
 
     // Global risk state object (local only)
     const riskState = {
-      mode: "NORMAL",
+      mode: "Normal",
       maxDailyLoss: 400,
       maxTradeLoss: 150,
       dayPL: 0
@@ -1237,7 +1232,7 @@
         dayChip.classList.toggle("negative", riskState.dayPL < 0);
       }
 
-      // Tiny mode indicators on Advisor / Post‑Trade / Bots / Logs
+      // Screen mode indicators.
       document.querySelectorAll("[data-mode-badge]").forEach(function (el) {
         el.textContent = "Mode: " + riskState.mode;
       });
@@ -1280,7 +1275,7 @@
 
       renderRiskState();
       syncFormsToRiskState();
-      alert("Risk profile applied to header, Advisor, Bots & Logs.");
+      alert("Risk profile applied to the workspace.");
     }
 
     const applyProfileBtn = document.getElementById("applyProfileBtn");
@@ -1356,6 +1351,29 @@
     // ----- Advisor: offline preview only -----
     const advisorOutputBox = document.getElementById("advisorOutputBox");
 
+
+    function formatAdvisorPreview(content) {
+      if (!content || typeof content !== "object") return "";
+      const symbol = content.symbol || "the selected idea";
+      const mode = content.risk_mode || "Normal";
+      const style = content.style || "Intraday";
+      const setup = content.setup_filter || "Approved setups";
+      return [
+        "Advisor preview",
+        "Idea: " + symbol,
+        "Mode: " + mode,
+        "Style: " + style,
+        "Focus: " + setup,
+        "",
+        "Suggested plan",
+        "1. Confirm the setup quality before acting.",
+        "2. Keep sizing inside the visible risk profile.",
+        "3. Review the result in Session Review after the action.",
+        "",
+        "Offline demo only. No live data, broker connection, execution, or financial advice."
+      ].join("\n");
+    }
+
     function setAdvisorOutput(content, { isError = false, isLoading = false } = {}) {
       if (!advisorOutputBox) return;
       advisorOutputBox.classList.remove("error", "loading");
@@ -1373,7 +1391,7 @@
       if (typeof content === "string") {
         advisorOutputBox.textContent = content;
       } else if (content) {
-        advisorOutputBox.textContent = JSON.stringify(content, null, 2);
+        advisorOutputBox.textContent = formatAdvisorPreview(content);
       } else {
         advisorOutputBox.textContent = "";
       }
@@ -1388,10 +1406,10 @@
       const ideaEl = document.getElementById("advIdea");
 
       const symbol = (symbolEl && symbolEl.value ? symbolEl.value : "").trim().toUpperCase();
-      const style = styleEl && styleEl.value ? styleEl.value : "SCALP_OPTIONS";
-      const risk_mode = riskModeEl && riskModeEl.value ? riskModeEl.value : (riskState.mode || "NORMAL");
-      const mental_state = mentalEl && mentalEl.value ? mentalEl.value : "DIALED_IN";
-      const setup_filter = setupFilterEl && setupFilterEl.value ? setupFilterEl.value : "A & B setups only";
+      const style = styleEl && styleEl.value ? styleEl.value : "Intraday plan";
+      const risk_mode = riskModeEl && riskModeEl.options[riskModeEl.selectedIndex] ? riskModeEl.options[riskModeEl.selectedIndex].textContent : "Normal";
+      const mental_state = mentalEl && mentalEl.value ? mentalEl.value : "Dialed in";
+      const setup_filter = setupFilterEl && setupFilterEl.value ? setupFilterEl.value : "Approved setups only";
       const idea = (ideaEl && ideaEl.value ? ideaEl.value : "").trim();
 
       const session = {
@@ -1450,32 +1468,32 @@
       runAdvisorBtn.addEventListener("click", runAdvisor);
     }
 
-    // Bots state (local only)
+    // Controls state
     const botsState = {
       panic: false,
       bots: [
         {
-          id: "NVDA_VWAP_MOMENTUM",
+          id: "Momentum Watch",
           symbol: "NVDA",
-          strategy: "VWAP_MOMENTUM_TREND",
-          mode: "HYBRID",
-          status: "SCANNING",
+          strategy: "Momentum trend",
+          mode: "Assist",
+          status: "Watching",
           plToday: 120
         },
         {
-          id: "SPY_BREAKOUT",
+          id: "Breakout Watch",
           symbol: "SPY",
-          strategy: "BREAKOUT_CONTINUATION",
-          mode: "SIGNAL_ONLY",
-          status: "IDLE",
+          strategy: "Breakout continuation",
+          mode: "Observe",
+          status: "Idle",
           plToday: 0
         },
         {
-          id: "TSLA_TREND_PULLBACK",
+          id: "Pullback Watch",
           symbol: "TSLA",
-          strategy: "TREND_PULLBACK",
-          mode: "AUTO",
-          status: "EXECUTING",
+          strategy: "Trend pullback",
+          mode: "Active",
+          status: "Reviewing",
           plToday: -85
         }
       ]
@@ -1503,7 +1521,7 @@
 
         const modeTd = document.createElement("td");
         const select = document.createElement("select");
-        ["OFF", "SIGNAL_ONLY", "HYBRID", "AUTO"].forEach(m => {
+        ["Off", "Observe", "Assist", "Active"].forEach(m => {
           const opt = document.createElement("option");
           opt.value = m;
           opt.textContent = m;
@@ -1512,7 +1530,7 @@
         select.value = bot.mode;
         select.addEventListener("change", () => {
           bot.mode = select.value;
-          // Offline demo only; production integrations require approved controls
+          // Public demo: screen-only mode changes
         });
         modeTd.appendChild(select);
         tr.appendChild(modeTd);
@@ -1532,8 +1550,8 @@
       const panicBtn = document.getElementById("panicButton");
       if (panicBtn) {
         panicBtn.textContent = botsState.panic
-          ? "Panic ACTIVE – click to clear (local)"
-          : "⛔ Panic: flatten & stop bots (local)";
+          ? "Activity paused - click to resume"
+          : "Pause all activity";
       }
     }
 
@@ -1541,37 +1559,36 @@
     if (panicButton) {
       panicButton.addEventListener("click", () => {
         botsState.panic = !botsState.panic;
-        // Offline demo only; production panic controls require approved integrations
         renderBotsTable();
-        alert(botsState.panic ? "Panic ON (local only)." : "Panic cleared (local only).");
+        alert(botsState.panic ? "Activity paused." : "Activity resumed.");
       });
     }
 
     const allSignalBtn = document.getElementById("allSignalOnlyButton");
     if (allSignalBtn) {
       allSignalBtn.addEventListener("click", () => {
-        botsState.bots.forEach(b => { b.mode = "SIGNAL_ONLY"; });
+        botsState.bots.forEach(b => { b.mode = "Observe"; });
         renderBotsTable();
-        // TODO: sync modes to backend
+        // Public demo: screen-only mode changes
       });
     }
 
-    // Logs state (local only)
+    // Timeline state
     const logsState = {
       entries: [
         {
           timestamp: new Date().toISOString(),
           level: "INFO",
-          source: "SYSTEM",
+          source: "Workspace",
           symbol: null,
-          message: "EdgeDesk v2 started in NORMAL mode."
+          message: "EdgeDesk opened in Normal mode."
         },
         {
           timestamp: new Date().toISOString(),
           level: "INFO",
-          source: "RISK",
+          source: "Risk",
           symbol: null,
-          message: "0DTE rule ENFORCED, skip first 1m after open in AUTO/HYBRID."
+          message: "Session guardrails are visible."
         }
       ]
     };
@@ -1628,9 +1645,9 @@
         logsState.entries.push({
           timestamp: new Date().toISOString(),
           level: "INFO",
-          source: "DEV",
+          source: "Review",
           symbol: "TSLA",
-          message: "Fake log event – replace with real API feed."
+          message: "Sample event added to the timeline."
         });
         renderLogsTable();
       });
