@@ -261,6 +261,11 @@ h2 {
   align-items: end;
   margin-bottom: 34px;
 }
+#edgedesk h2 + .section-lede,
+#demo-request h2 + .section-lede,
+#residential h2 + .section-lede {
+  margin-top: 18px;
+}
 .section-lede { color: var(--muted); font-size: 1rem; line-height: 1.75; }
 .section.dark .section-lede { color: #cbd7cf; }
 .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 0.78fr); gap: 28px; align-items: stretch; }
