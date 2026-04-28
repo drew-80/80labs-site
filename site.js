@@ -2,6 +2,56 @@
 const endpoints = Array.from(document.querySelectorAll('.endpoint'));
 let cloudVisible = false;
 
+function alignScenePulseLines() {
+  const board = document.querySelector('.scene-board');
+  const host = board && board.querySelector('.node.host');
+  if (!board || !host || board.getClientRects().length === 0) return;
+
+  const boardRect = board.getBoundingClientRect();
+  const hostRect = host.getBoundingClientRect();
+  const hostCenterX = hostRect.left + hostRect.width / 2;
+  const hostCenterY = hostRect.top + hostRect.height / 2;
+  const links = [
+    ['.line-a', '.endpoint-b'],
+    ['.line-b', '.endpoint-a'],
+    ['.line-c', '.endpoint-d'],
+    ['.line-d', '.endpoint-c']
+  ];
+
+  links.forEach(([lineSelector, endpointSelector]) => {
+    const line = board.querySelector(lineSelector);
+    const endpoint = board.querySelector(endpointSelector);
+    if (!line || !endpoint) return;
+
+    const endpointRect = endpoint.getBoundingClientRect();
+    const endpointCenterX = endpointRect.left + endpointRect.width / 2;
+    const endpointCenterY = endpointRect.top + endpointRect.height / 2;
+    const endpointIsRight = endpointCenterX > hostCenterX;
+    const startX = endpointIsRight ? hostRect.right : hostRect.left;
+    const endX = endpointIsRight ? endpointRect.left : endpointRect.right;
+    const dx = endX - startX;
+    const dy = endpointCenterY - hostCenterY;
+
+    line.style.right = 'auto';
+    line.style.bottom = 'auto';
+    line.style.left = (startX - boardRect.left) + 'px';
+    line.style.top = (hostCenterY - boardRect.top - line.offsetHeight / 2) + 'px';
+    line.style.width = Math.hypot(dx, dy) + 'px';
+    line.style.transform = 'rotate(' + Math.atan2(dy, dx) + 'rad)';
+  });
+  board.classList.add('lines-ready');
+}
+
+function scheduleScenePulseAlignment() {
+  window.requestAnimationFrame(alignScenePulseLines);
+}
+
+scheduleScenePulseAlignment();
+window.addEventListener('resize', scheduleScenePulseAlignment);
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(scheduleScenePulseAlignment);
+}
+
 function makeJobId() {
   return 'preview-' + Math.random().toString(36).slice(2, 8).toUpperCase();
 }
