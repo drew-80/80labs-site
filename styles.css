@@ -99,6 +99,17 @@ code {
 .button:hover { transform: translateY(-1px); background: var(--teal); border-color: var(--teal); }
 .button.secondary { background: transparent; color: var(--teal-dark); border-color: var(--line-strong); }
 .button.secondary:hover { background: #fff; border-color: var(--teal); }
+.hero .button.secondary {
+  background: var(--teal);
+  border-color: rgba(188, 216, 203, 0.82);
+  color: #f7f8f2;
+}
+.hero .button.secondary:hover,
+.hero .button.secondary:focus-visible {
+  background: rgba(247, 248, 242, 0.96);
+  border-color: #fff;
+  color: var(--teal-dark);
+}
 .button.full { width: 100%; margin-top: 16px; }
 
 .hero {
@@ -214,7 +225,12 @@ h2 {
   font-size: 0.8rem;
 }
 .node strong { font-size: 0.92rem; }
-.node.host { left: 36%; top: 38%; border-color: var(--gold); }
+.node.host {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-color: var(--gold);
+}
 .node.endpoint-a { left: 7%; top: 12%; }
 .node.endpoint-b { right: 7%; top: 14%; }
 .node.endpoint-c { left: 10%; bottom: 12%; }
@@ -224,8 +240,10 @@ h2 {
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
   transform-origin: left center;
-  opacity: 0.65;
+  opacity: 0;
+  transition: opacity 160ms ease;
 }
+.scene-board.lines-ready .pulse-line { opacity: 0.65; }
 .line-a { width: 210px; left: 28%; top: 39%; transform: rotate(-34deg); }
 .line-b { width: 190px; left: 48%; top: 42%; transform: rotate(-145deg); }
 .line-c { width: 230px; left: 29%; bottom: 33%; transform: rotate(32deg); }
