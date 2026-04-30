@@ -1,7 +1,3 @@
-﻿const demoLog = document.getElementById('demo-log');
-const endpoints = Array.from(document.querySelectorAll('.endpoint'));
-let cloudVisible = false;
-
 function alignScenePulseLines() {
   const board = document.querySelector('.scene-board');
   const host = board && board.querySelector('.node.host');
@@ -52,46 +48,29 @@ if (document.fonts && document.fonts.ready) {
   document.fonts.ready.then(scheduleScenePulseAlignment);
 }
 
-function makeJobId() {
-  return 'preview-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+function configureProofVideo() {
+  const proofVideo = document.querySelector('[data-proof-video]');
+  if (!proofVideo || !window.matchMedia) return;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const applyMotionPreference = () => {
+    if (reducedMotion.matches) {
+      proofVideo.removeAttribute('autoplay');
+      proofVideo.pause();
+      return;
+    }
+    if (proofVideo.hasAttribute('autoplay')) {
+      proofVideo.play().catch(() => {});
+    }
+  };
+
+  applyMotionPreference();
+  if (reducedMotion.addEventListener) {
+    reducedMotion.addEventListener('change', applyMotionPreference);
+  }
 }
 
-function renderDemoLog(lines) {
-  demoLog.innerHTML = lines.map((line) => '<span class="log-line ' + (line.kind || '') + '">' + line.text + '</span>').join('');
-}
-
-document.getElementById('trigger-demo').addEventListener('click', () => {
-  const jobId = makeJobId();
-  endpoints.forEach((endpoint) => endpoint.classList.remove('active'));
-  renderDemoLog([
-    { text: 'preview_id: ' + jobId, kind: 'ok' },
-    { text: 'job_id: ' + jobId, kind: 'ok' },
-    { text: 'route_type: local preview', kind: 'ok' },
-    { text: 'cloud_compute: optional, not used', kind: 'warn' },
-    { text: 'CloudBeasts action preview accepted' }
-  ]);
-  endpoints.forEach((endpoint, index) => {
-    window.setTimeout(() => {
-      endpoint.classList.add('active');
-      const node = endpoint.dataset.node;
-      endpoint.querySelector('span').textContent = node + ' previewed ' + jobId;
-      demoLog.insertAdjacentHTML('beforeend', '<span class="log-line ok">node_id: ' + node + ' preview propagation</span>');
-      demoLog.scrollTop = demoLog.scrollHeight;
-    }, 420 + index * 360);
-  });
-});
-
-document.getElementById('toggle-cloud').addEventListener('click', () => {
-  cloudVisible = !cloudVisible;
-  const jobId = makeJobId();
-  renderDemoLog([
-    { text: 'preview_id: ' + jobId, kind: 'ok' },
-    { text: 'job_id: ' + jobId, kind: 'ok' },
-    { text: 'route_type: ' + (cloudVisible ? 'hybrid preview' : 'local preview'), kind: cloudVisible ? 'warn' : 'ok' },
-    { text: 'cloud_compute: ' + (cloudVisible ? 'optional expansion for heavier workloads' : 'optional, not default'), kind: 'warn' },
-    { text: 'local endpoints remain the starting point' }
-  ]);
-});
+configureProofVideo();
 
 function calculateRoi() {
   const screens = Math.max(0, Number(document.getElementById('screens').value || 0));

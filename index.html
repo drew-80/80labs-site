@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CloudBeasts x lanOS | 80 Labs</title>
-  <meta name="description" content="CloudBeasts x lanOS turns existing devices into a coordinated, local-first system. Your network becomes a system that performs." />
+  <meta name="description" content="CloudBeasts x lanOS turns compatible devices on your LAN into a local workspace. Shell 1 is live with shared memory, LAN visibility, and core proof." />
   <meta property="og:title" content="CloudBeasts x lanOS | 80 Labs" />
-  <meta property="og:description" content="Your network becomes a system that performs." />
+  <meta property="og:description" content="Your network becomes a workspace. Shell 1 is live." />
   <meta property="og:image" content="assets/cloudbeasts/stormtech-rare.png" />
   <meta name="theme-color" content="#10231f" />
   <link rel="icon" href="data:," />
@@ -20,10 +20,11 @@
         <span>80 Labs</span>
       </a>
       <div class="nav-links">
-        <a href="#demo">Demo</a>
+        <a href="#demo">Proof</a>
+        <a href="#shells">Shells</a>
         <a href="#edgedesk">EdgeDesk</a>
         <a href="#enterprise">Enterprise</a>
-        <a href="#residential">Residential</a>
+        <a href="#residential">Waitlist</a>
         <a class="button" href="#demo-request">Book demo</a>
       </div>
     </nav>
@@ -31,20 +32,20 @@
 
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
-      <img class="hero-media" src="assets/cloudbeasts/stormtech-rare.png" alt="CloudBeasts showcase artifact for a coordinated-device preview" />
+      <img class="hero-media" src="assets/cloudbeasts/stormtech-rare.png" alt="CloudBeasts showcase artifact for a coordinated local workspace" />
       <div class="hero-inner">
         <div class="hero-copy-block">
           <p class="eyebrow">CloudBeasts x lanOS</p>
-          <h1 id="hero-title">CloudBeasts x lanOS</h1>
-          <p class="hero-copy">Your network becomes a system that performs. It starts with the hardware users already own, shows visible performance through coordination, and can optionally expand with cloud compute for heavier workloads.</p>
+          <h1 id="hero-title">Your network becomes a workspace.</h1>
+          <p class="hero-copy">lanOS turns compatible devices on your LAN into a local tool system. Shell 1 is already running: core checks, shared memory, and LAN visibility. More shells bring more tools online.</p>
           <div class="hero-actions">
-            <a class="button" href="#demo-request">Book a live demo</a>
-            <a class="button secondary" href="edge/">Open EdgeDesk example</a>
+            <a class="button" href="#residential">Join the waitlist</a>
+            <a class="button secondary" href="#demo-request">Book a live demo</a>
           </div>
           <div class="hero-proof" aria-label="Product proof points">
+            <span><strong>Shell 1 is live</strong> Core checks, shared memory, and LAN visibility.</span>
             <span><strong>lanOS coordinates</strong> Compatible devices and local state on the network.</span>
-            <span><strong>CloudBeasts triggers</strong> Useful actions across the coordinated system.</span>
-            <span><strong>EdgeDesk demonstrates</strong> One workspace pattern built on top.</span>
+            <span><strong>CloudBeasts triggers</strong> Useful actions across the system.</span>
           </div>
         </div>
         <div class="coordination-scene" aria-label="One host coordinating endpoint devices">
@@ -53,11 +54,11 @@
             <span class="pulse-line line-b"></span>
             <span class="pulse-line line-c"></span>
             <span class="pulse-line line-d"></span>
-            <div class="node host"><strong>Host</strong><span>lanOS online</span><span>route: local</span></div>
-            <div class="node endpoint-a"><strong>Workspace</strong><span>EdgeDesk</span><span>example</span></div>
-            <div class="node endpoint-b"><strong>Endpoint B</strong><span>node-02</span><span>ready</span></div>
-            <div class="node endpoint-c"><strong>Display</strong><span>node-03</span><span>ready</span></div>
-            <div class="node endpoint-d"><strong>Dashboard</strong><span>node-04</span><span>ready</span></div>
+            <div class="node host"><strong>Shell 1</strong><span>local hub</span><span>memory online</span></div>
+            <div class="node endpoint-a"><strong>Phone</strong><span>new memory</span><span>sent</span></div>
+            <div class="node endpoint-b"><strong>Laptop</strong><span>same site</span><span>same state</span></div>
+            <div class="node endpoint-c"><strong>Network</strong><span>LAN visible</span><span>devices seen</span></div>
+            <div class="node endpoint-d"><strong>Workspace</strong><span>tools ready</span><span>local first</span></div>
           </div>
         </div>
       </div>
@@ -67,36 +68,72 @@
       <div class="section-inner">
         <div class="section-head">
           <div>
-            <p class="kicker">Preview flow</p>
-            <h2>See how workspace, action layer, and local coordination fit together.</h2>
+            <p class="kicker">Shell 1: Core Proof</p>
+            <h2>The baseline tool surface is already running.</h2>
           </div>
-          <p class="section-lede">This on-page flow is a visual preview. Book a live demo for the actual local run with locally hosted lanOS, CloudBeasts actions, and available job, node, route, and status evidence. The live proof should be simple: one device coordinated several other compatible endpoints.</p>
+          <p class="section-lede">Shell 1 checks whether the local system is alive. It shows the hub, shared memory, and network visibility before additional shells bring more tools online.</p>
         </div>
-        <div class="demo-panel panel">
-          <div class="demo-stage">
-            <div class="demo-control">
-              <span class="tag">Preview only</span>
-              <h3>CloudBeasts action trigger</h3>
-              <p class="section-lede">Trigger a simulated action and watch the job move through visible endpoint states. Cloud compute remains optional and labeled.</p>
-              <div class="hero-actions">
-                <button class="button" type="button" id="trigger-demo">Run preview action</button>
-                <button class="button secondary" type="button" id="toggle-cloud">Show optional cloud route</button>
-              </div>
-              <div class="endpoint-grid" id="endpoint-grid">
-                <div class="endpoint" data-node="node-01"><strong>EdgeDesk</strong><span>node-01 awaiting preview</span></div>
-                <div class="endpoint" data-node="node-02"><strong>CloudBeasts</strong><span>node-02 awaiting preview</span></div>
-                <div class="endpoint" data-node="node-03"><strong>Local display</strong><span>node-03 awaiting preview</span></div>
-                <div class="endpoint" data-node="node-04"><strong>Evidence log</strong><span>node-04 awaiting preview</span></div>
-              </div>
-            </div>
-            <div class="demo-log" aria-live="polite" id="demo-log">
-              <span class="log-line">preview_id: idle</span>
-              <span class="log-line">job_id: preview pending</span>
-              <span class="log-line">route_type: local preview</span>
-              <span class="log-line">node_id: preview pending</span>
-              <span class="log-line warn">cloud_compute: optional, not default</span>
+        <div class="proof-panel panel">
+          <div class="proof-layout">
+            <figure class="proof-frame">
+              <video class="proof-video" data-proof-video controls autoplay muted loop playsinline preload="metadata" poster="media/lanos-shell1-core-proof-poster.jpg" aria-label="Shell 1 field proof video showing shared local memory across phone, Shell 1, and laptop">
+                <source src="media/lanos-shell1-core-proof.mp4" type="video/mp4" />
+                <track src="media/lanos-shell1-core-proof-captions.vtt" kind="captions" srclang="en" label="English captions" default />
+                <a href="media/lanos-shell1-core-proof.mp4">Open the Shell 1 proof video.</a>
+              </video>
+              <figcaption>Raw field proof capture from the live local build. Silent, captioned, and intentionally unpolished.</figcaption>
+            </figure>
+            <div class="proof-copy">
+              <span class="tag">Live local proof</span>
+              <h3>Shell 1 proves the core. Additional shells expand what the LAN can do.</h3>
+              <p>A phone sends a new memory. Shell 1 confirms the local hub. A laptop opens the same local site and sees both the older memory and the new iPhone message persist.</p>
+              <dl class="proof-facts">
+                <div><dt>What is shown</dt><dd>Shared local memory across devices already on the network.</dd></div>
+                <div><dt>Why it matters</dt><dd>The page is not asking visitors to imagine proof. The proof is here.</dd></div>
+                <div><dt>What comes next</dt><dd>More shells bring more grouped tools and workflows online.</dd></div>
+              </dl>
+              <details class="transcript">
+                <summary>Proof transcript</summary>
+                <ol>
+                  <li>Raw proof capture: Shell 1 / local LAN build.</li>
+                  <li>Old memory is already loaded.</li>
+                  <li>Phone sends a new memory.</li>
+                  <li>Shell 1 confirms the local hub.</li>
+                  <li>Laptop opens the same local site.</li>
+                  <li>Old memory and new message persist.</li>
+                </ol>
+              </details>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="shells">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Shells are tool sets</p>
+            <h2>Each shell brings a new group of tools into the local system.</h2>
+          </div>
+          <p class="section-lede">Shell 1 broadens the system by showing what is available on the LAN. Shell 2 organizes devices into project-specific groups so information can move quickly and control can stay local.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card shell-card">
+            <span class="tag">Shell 1</span>
+            <h3>Core proof</h3>
+            <p>Hub connection, shared memory, LAN visibility, and persistent state across networked screens.</p>
+          </article>
+          <article class="card shell-card">
+            <span class="tag">Shell 2</span>
+            <h3>Speed and control</h3>
+            <p>Group connected devices by project, move information quickly between them, and run different local systems as device clusters connect.</p>
+          </article>
+          <article class="card shell-card">
+            <span class="tag">End-to-end systems</span>
+            <h3>Creation paths</h3>
+            <p>Robotics is treated as an end-to-end creation path. Shell 2 helps builders organize the speed and control layer before the complete system is assembled.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -160,8 +197,8 @@
       <div class="section-inner split">
         <div>
           <p class="kicker">Book a live demo</p>
-          <h2>Use the page for interest. Use the demo for proof.</h2>
-          <p class="section-lede">A live walkthrough can show the actual local run: EdgeDesk as the workspace surface, CloudBeasts as the action layer, lanOS coordination, and available <code>job_id</code>, <code>node_id</code>, <code>route_type</code>, status, and timestamp evidence.</p>
+          <h2>See proof here. Go deeper in the live demo.</h2>
+          <p class="section-lede">The page shows field proof from the local build. A live walkthrough can go deeper into EdgeDesk as one workspace surface, CloudBeasts as the action layer, lanOS coordination, and available route, status, and timestamp evidence.</p>
         </div>
         <form class="waitlist" id="demo-form" action="mailto:hello@80labs.to" method="post" enctype="text/plain">
           <span class="tag">Demo request</span>
@@ -186,9 +223,9 @@
     <section class="section alt" id="residential">
       <div class="section-inner split">
         <div>
-          <p class="kicker">Residential</p>
-          <h2>The devices you already own, finally working together.</h2>
-          <p class="section-lede">Join the early list for CloudBeasts x lanOS, a local-first way to connect and use the devices already on your network. Your devices can do more when they work together. Performance depends on your network, but the system adapts.</p>
+          <p class="kicker">Waitlist</p>
+          <h2>Join the waitlist for upcoming shells.</h2>
+          <p class="section-lede">Shell 1 is live. Join the waitlist for access, onboarding, and upcoming tool sets as additional shells come online. Performance depends on your network, compatible devices, and setup, but the core direction is local: speed, memory, and control close to the devices you already own.</p>
           <div class="tiers">
             <div class="tier"><strong>3 invites</strong><span>Early access priority</span></div>
             <div class="tier"><strong>10 invites</strong><span>Priority onboarding</span></div>
